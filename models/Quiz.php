@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\answer\Answer;
+use app\models\questions\Questions;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -66,6 +68,26 @@ class Quiz extends \yii\db\ActiveRecord
             'update_at' => 'Update At',
             'max_question' => 'Max Question',
         ];
+    }
+    public function delQuestion($param)
+    {
+
+        $question_id = (new \yii\db\Query())
+            ->select(['id'])
+            ->from('questions')
+            ->where(['quiz_id' => $param])
+            ->scalar();
+        $answers = Answer::find()->where(['in','question_id',$question_id])->all();
+        foreach ($answers as $answer){
+            $answer->delete();
+        }
+
+        $questions = Questions::find()->where(['in','quiz_id',$param])->all();
+         foreach ($questions as $question) {
+             $question->delete();
+         }
+
+
     }
 
     /**

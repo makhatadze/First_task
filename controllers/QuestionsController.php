@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\answer\Answer;
+use app\models\answer\AnswerSearch;
 use Yii;
 use app\models\questions\Questions;
 use app\models\questions\QuestionsSearch;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +16,7 @@ use yii\filters\VerbFilter;
 /**
  * QuestionController implements the CRUD actions for Questions model.
  */
-class QuestionController extends Controller
+class QuestionsController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -52,8 +56,15 @@ class QuestionController extends Controller
      */
     public function actionView($id)
     {
+
+
+        $searchModel = new AnswerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider -> query->where(['question_id'=>$id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -62,17 +73,36 @@ class QuestionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCr()
+    public function actionCreate()
     {
         $model = new Questions();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+
+
+        if ($model->load(Yii::$app->request->post())){
+            if(Questions::maxQuestions($model->quiz_id) && $model->save()){
+
+                Yii::$app->session->setFlash('success', "Successfully created Question");
+                return $this->redirect(['view', 'id' => $model->id]);
+
+            }
+            Yii::$app->session->setFlash('error', "You can't create much more Question! You can update or delete any Questions");
+            return $this->redirect('create');
+
+
+
+
+
+
+
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+
+
     }
 
     /**
@@ -104,7 +134,12 @@ class QuestionController extends Controller
      */
     public function actionDelete($id)
     {
+        $answers = Answer::find()->where(['in','question_id',$id])->all();
+            foreach ($answers as $answer) {
+                $answer->delete();
+            }
         $this->findModel($id)->delete();
+
 
         return $this->redirect(['index']);
     }

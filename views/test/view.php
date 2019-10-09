@@ -1,5 +1,6 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -17,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Add question', ['', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -25,6 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('create question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
     </p>
 
     <?= DetailView::widget([
@@ -42,5 +44,94 @@ $this->params['breadcrumbs'][] = $this->title;
             'max_question',
         ],
     ]) ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn',
+
+
+            ],
+
+            [   'attribute' => 'Questions',
+                'value' => function($model){
+                    return $model->name;
+
+                }
+
+
+
+
+            ],
+
+
+
+
+
+
+
+
+
+            ['class' => 'yii\grid\ActionColumn',
+                'header' => 'Actions',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'template' => '{status}{view}{update}{delete}',
+                'buttons' => [
+
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                            'title' => Yii::t('app', 'lead-view'),
+
+                        ]);
+                    },
+
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                            'title' => Yii::t('app', 'lead-update'),
+                        ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('app', 'lead-delete'),
+                        ]);
+                    }
+
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'view') {
+                        $url ='http://app.test/questions/view?id='.$model->id;
+                        return $url;
+                    }
+
+                    if ($action === 'update') {
+                        $url ='http://app.test/questions/update?id='.$model->id;
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url ='http://app.test/questions/delete?id='.$model->id;
+                        return $url;
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            ],
+        ],
+    ]); ?>
+
+
 
 </div>
+
+

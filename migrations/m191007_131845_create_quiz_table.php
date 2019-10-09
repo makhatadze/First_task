@@ -18,7 +18,7 @@ class m191007_131845_create_quiz_table extends Migration
             'min_corect_answer' => $this->integer(2),
             'created_at' => $this->integer(11),
             'update_at' => $this->integer(11),
-            'max-question' =>$this->integer(2)
+            'max_question' =>$this->integer(2)
         ]);
     }
 

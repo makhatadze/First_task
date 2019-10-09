@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\questions\Questions;
+use app\models\questions\QuestionsSearch;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
@@ -52,8 +54,14 @@ class TestController extends Controller
      */
     public function actionView($id)
     {
+
+        $searchModel = new QuestionsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider -> query->where(['quiz_id'=>$id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -104,6 +112,7 @@ class TestController extends Controller
      */
     public function actionDelete($id)
     {
+        Quiz::delQuestion($id);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
