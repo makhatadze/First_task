@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\questions\Questions;
+use app\models\QuizSearch;
+use app\models\Quiz;
+
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,7 +65,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = Quiz::find()->asArray()->all();
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -125,4 +133,5 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
 }

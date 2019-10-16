@@ -138,4 +138,9 @@ class AnswerController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionTest($id){
+
+    }
+
 }

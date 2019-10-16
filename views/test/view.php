@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-
             'subject',
             'min_corect_answer',
             'created_at:datetime',
@@ -46,6 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+
+
+
 
         'columns' => [
             ['class' => 'yii\grid\SerialColumn',
@@ -63,10 +65,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ],
-
-
-
-
 
 
 

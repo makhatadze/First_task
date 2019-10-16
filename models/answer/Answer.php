@@ -5,6 +5,7 @@ namespace app\models\answer;
 use app\models\questions\Questions;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "answer".
@@ -29,6 +30,10 @@ class Answer extends \yii\db\ActiveRecord
     {
         return 'answer';
     }
+
+
+
+
 
     public function behaviors()
     {
@@ -78,13 +83,14 @@ class Answer extends \yii\db\ActiveRecord
 
     }
 
+
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => '',
             'question_id' => 'Question ID',
             'is_correct' => 'Is Correct',
             'name' => 'Please input answer',

@@ -10,13 +10,14 @@ use yii\widgets\DetailView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->name;
+
 $this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="questions-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode('name') ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -42,6 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'rowOptions' => function($model){
+        if($model->is_correct==0){
+            return ['class' => 'danger'];
+        }elseif($model->is_correct==1){
+            return ['class','success'];
+        }
+        },
 
         'columns' => [
             ['class' => 'yii\grid\SerialColumn',

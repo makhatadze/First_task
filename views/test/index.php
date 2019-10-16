@@ -20,14 +20,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
 
+                [
+                    'label' => 'Subject',
+                    'format' => 'raw',
+                    // here comes the problem - instead of parent_region I need to have parent
+                    'value' => function ($dataProvider) {
+                        return Html::a('Start test', ['test','id'=>$dataProvider->id],[
+                                'class' =>'btn btn-info',
+                            'data' =>[
+                              'confirm' => 'Are you sure you want to start test?',
+
+                            ],
+
+                        ]);
+                    },
+                ],
                 'subject',
+
                 'min_corect_answer',
                 'created_at:datetime',
                 'update_at:datetime',
@@ -37,7 +55,4 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\ActionColumn'],
             ],
         ]); ?>
-
-
     </div>
-
