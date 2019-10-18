@@ -18,51 +18,80 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'layout' => '{items}',
 
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn',
-            'headerOptions' => ['style' => 'background-color:#ccf8fe'],
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'label' => 'Status',
+                'contentOptions'=>function ($dataProvider){
+
+                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
+                        return ['style'=>'background-color:MediumSeaGreen'];
+                    }else{
+                        return ['style'=>'background-color:Tomato'];
+                    }
+
+
+                },
+
+                'value' => function () {
+                    return '';
+                },
 
             ],
 
 
-
-
-
             [
-                'label' => 'Answer',
-                'headerOptions' => ['style' => 'background-color:#ccf8fe'],
-
-
+                'label' => 'Quiz Name',
 
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
+                    $s = $dataProvider->getQuizSubject();
+                    if(!$s){
+                        return '';
+                    }else{
+                        return $s;
+                    }
 
-
-                    return "$dataProvider->correct_answer";
 
                 },
 
             ],
-            [
-                'label' => 'Percent',
-                'headerOptions' => ['style' => 'background-color:red;'],
 
+
+            [
+                'label' => 'Correct Answer',
 
 
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
-                    $count = $dataProvider->getQuestionCount();
+
+                    return "$dataProvider->correct_answer";
+
+                },
+            ],
+
+            [
+                'label' => 'Percent',
+
+
+              'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+                    $count = $dataProvider->question_count;
                     $correct = $dataProvider->correct_answer;
                     $percent = ($count / 100) * $correct;
+                    return \Yii::$app->formatter->asPercent($percent, 2);
 
 
-
-                    return "$correct / $count     and     $percent %     ";
 
                 },
 
@@ -71,8 +100,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'label' => 'Minimum correct answer',
-
-
 
                 'format' => 'raw',
 
@@ -83,58 +110,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
             ],
+
+
             [
-                'label' => 'Status',
-                'contentOptions'=>function($dataProvider){
-
-
-
-                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
-                        return ['style'=>'color:green'];
-                    }else{
-                        return ['style'=>'color:red'];
-                    }
-
-
-                },
-
-
-                'value' => function ($dataProvider) {
-
-                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
-                        return 'passed';
-                    }else{
-                        return 'failed';
-                    }
-
-                },
-
-            ],
-            [
-                'label' => 'Quiz Name',
-
-
+                'label' => 'Passed Time',
 
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
 
-                    return $dataProvider->getQuizSubject();
+                    return Yii::$app->formatter->asDate($dataProvider->created_at);
 
                 },
 
             ],
 
-
-
-
-            'created_at:datetime',
-
-
             ['class' => 'yii\grid\ActionColumn'],
 
         ],
-        'tableOptions' =>['class' => 'table table-hover'],
+
     ]); ?>
 
 

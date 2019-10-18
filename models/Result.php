@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int $quiz_id
-
+ * @property int $question_count
  * @property int $correct_ans
  * @property int $min_correct_ans
  * @property int $created_at
@@ -48,7 +48,7 @@ class Result extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'correct_answer', 'min_correct_answer', 'created_at', 'updated_at'], 'integer'],
+            [['quiz_id', 'correct_answer', 'min_correct_answer', 'question_count','created_at', 'updated_at'], 'integer'],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
         ];
     }
@@ -63,6 +63,7 @@ class Result extends \yii\db\ActiveRecord
             'quiz_id' => 'Quiz ID',
             'correct_answer' => 'Correct Answer',
             'min_correct_answer' => 'Min Correct Answer',
+            'question_count' => 'question count',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -80,10 +81,7 @@ class Result extends \yii\db\ActiveRecord
         return $this->hasOne(Quiz::className(), ['id' => 'quiz_id'])->select('subject')->scalar();
 
     }
-    public function getQuestionCount(){
-        return $this->hasMany(Questions::className(), ['quiz_id' => 'quiz_id'])->count();
 
-    }
 
 
 

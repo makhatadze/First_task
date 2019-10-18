@@ -149,10 +149,10 @@ class QuizController extends Controller
 
         $min_correct = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','min_corect_answer');
         $quiz_name = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','subject');
+        $count_question = Questions::find()->where(['in','quiz_id',$id])->count();
 
         $questions = Questions::find()->where(['in','quiz_id',$id])->all();
         if(Yii::$app->request->post()){
-
             $correct = Yii::$app->request->post();
             $k = 0;
 
@@ -166,8 +166,8 @@ class QuizController extends Controller
             $result->quiz_id = $id;
             $result->correct_answer= $k;
             $result->min_correct_answer =$min_correct[$id];
+            $result->question_count = $count_question;
             $result->save();
-
 
 
 

@@ -17,7 +17,7 @@ class ResultSearch extends Result
     public function rules()
     {
         return [
-            [['id', 'quiz_id', 'correct_answer', 'min_correct_answer', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'quiz_id', 'correct_answer', 'question_count','min_correct_answer', 'created_at', 'updated_at'], 'integer'],
 
         ];
     }
@@ -62,6 +62,7 @@ class ResultSearch extends Result
             'quiz_id' => $this->quiz_id,
             'correct_answer' => $this->correct_answer,
             'min_correct_answer' => $this->min_correct_answer,
+            'question_count' => $this->question_count,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
