@@ -38,15 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'update_at:datetime',
 
 
-
-
             'max_question',
         ],
     ]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-
-
 
 
         'columns' => [
@@ -60,9 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->name;
 
                 }
-
-
-
 
             ],
 

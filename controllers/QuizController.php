@@ -6,6 +6,7 @@ use app\models\answer\Answer;
 use app\models\answer\AnswerSearch;
 use app\models\questions\Questions;
 use app\models\questions\QuestionsSearch;
+use app\models\Result;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
@@ -140,52 +141,16 @@ class TestController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionStart($id)
-    {
 
-        if(Yii::$app->request->post()){
-
-            var_dump($this);
-        }
-
-
-
-
-        $query = Questions::find()->where(['in','quiz_id',$id]);
-        $model = new Answer();
-
-
-        $an = Answer::find();
-        $pagination = new Pagination([
-            'defaultPageSize' =>11
-            ,
-            'totalCount' => $query->count(),
-        ]);
-
-        $questions = $query->orderBy('name')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        $answer = $an->orderBy('name')
-            ->all();
-
-
-        return $this->render('start', [
-            'questions' => $questions,
-            'pagination' => $pagination,
-            'answer' => $answer,
-            'model' => $model,
-        ]);
-
-    }
     public function actionTest($id)
     {
+        $result = new Result();
 
 
         $min_correct = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','min_corect_answer');
+        $quiz_name = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','subject');
 
         $questions = Questions::find()->where(['in','quiz_id',$id])->all();
-        $answers = Answer::find()->all();
         if(Yii::$app->request->post()){
 
             $correct = Yii::$app->request->post();
@@ -198,21 +163,26 @@ class TestController extends Controller
                 }
 
             }
+            $result->quiz_id = $id;
+            $result->quiz_name = $quiz_name[$id];
+            $result->correct_ans= $k;
+            $result->min_correct_ans =$min_correct[$id];
+            $result->save();
+
+
+
 
             if ($min_correct[$id]<=$k) {
-                Yii::$app->session->setFlash('success', "You successfully passed exam!");
+                Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " .$k);
             } else {
                 Yii::$app->session->setFlash('error', "You failed! your correct answer is " .$k."! Min correct answer is  " .$min_correct[$id]);
             }
             return $this->redirect(['tr' ]);
 
-
-
         }
 
         return $this->render('test', [
             'questions' =>$questions,
-            'answers'=>$answers,
     ]);
 
     }

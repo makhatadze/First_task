@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('Start test', ['test','id'=>$dataProvider->id],[
                                 'class' =>'btn btn-info',
                             'data' =>[
-                              'confirm' => 'Are you sure you want to start test?',
+                              'confirm' => 'Are you sure that you want to start test?',
 
                             ],
 
