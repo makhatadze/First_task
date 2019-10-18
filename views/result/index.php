@@ -60,7 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $s;
                     }
 
-
                 },
 
             ],
