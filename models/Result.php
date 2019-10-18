@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\questions\Questions;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -79,5 +80,15 @@ class Result extends \yii\db\ActiveRecord
         return $this->hasOne(Quiz::className(), ['id' => 'quiz_id'])->select('subject')->scalar();
 
     }
+    public function getQuestionCount(){
+        return $this->hasMany(Questions::className(), ['quiz_id' => 'quiz_id'])->count();
+
+    }
+
+
+
+
+
+
 
 }

@@ -22,12 +22,67 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
 
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn',
+            'headerOptions' => ['style' => 'background-color:#ccf8fe'],
+
+            ],
 
 
 
-            'correct_answer',
-            'min_correct_answer',
+
+
+            [
+                'label' => 'Answer',
+                'headerOptions' => ['style' => 'background-color:#ccf8fe'],
+
+
+
+                'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+
+
+                    return "$dataProvider->correct_answer";
+
+                },
+
+            ],
+            [
+                'label' => 'Percent',
+                'headerOptions' => ['style' => 'background-color:red;'],
+
+
+
+                'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+                    $count = $dataProvider->getQuestionCount();
+                    $correct = $dataProvider->correct_answer;
+                    $percent = ($count / 100) * $correct;
+
+
+
+                    return "$correct / $count     and     $percent %     ";
+
+                },
+
+            ],
+
+
+            [
+                'label' => 'Minimum correct answer',
+
+
+
+                'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+
+                    return "$dataProvider->min_correct_answer";
+
+                },
+
+            ],
             [
                 'label' => 'Status',
                 'contentOptions'=>function($dataProvider){
@@ -41,9 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
 
 
-
                 },
-
 
 
                 'value' => function ($dataProvider) {
@@ -79,7 +132,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ['class' => 'yii\grid\ActionColumn'],
+
         ],
+        'tableOptions' =>['class' => 'table table-hover'],
     ]); ?>
 
 
