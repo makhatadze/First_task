@@ -2,7 +2,7 @@
 
 namespace app\models\questions;
 
-use app\models\Answer;
+use app\models\answer\Answer;
 use app\models\Quiz;
 use Yii;
 use yii\db\ActiveRecord;

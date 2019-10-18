@@ -21,7 +21,7 @@ use yii\web\UploadedFile;
 /**
  * TestController implements the CRUD actions for Quiz model.
  */
-class TestController extends Controller
+class QuizController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -164,9 +164,8 @@ class TestController extends Controller
 
             }
             $result->quiz_id = $id;
-            $result->quiz_name = $quiz_name[$id];
-            $result->correct_ans= $k;
-            $result->min_correct_ans =$min_correct[$id];
+            $result->correct_answer= $k;
+            $result->min_correct_answer =$min_correct[$id];
             $result->save();
 
 
