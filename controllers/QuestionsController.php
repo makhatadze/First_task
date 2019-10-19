@@ -39,6 +39,13 @@ class QuestionsController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $searchModel = new QuestionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -56,6 +63,13 @@ class QuestionsController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
 
 
         $searchModel = new AnswerSearch();
@@ -75,6 +89,14 @@ class QuestionsController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
+
         $model = new Questions();
 
 
@@ -114,6 +136,13 @@ class QuestionsController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -134,6 +163,13 @@ class QuestionsController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $answers = Answer::find()->where(['in','question_id',$id])->all();
             foreach ($answers as $answer) {
                 $answer->delete();

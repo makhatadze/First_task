@@ -44,6 +44,13 @@ class QuizController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $searchModel = new QuizSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -61,6 +68,13 @@ class QuizController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
 
         $searchModel = new QuestionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -79,6 +93,13 @@ class QuizController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $model = new Quiz();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -99,6 +120,14 @@ class QuizController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -119,6 +148,13 @@ class QuizController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         Quiz::delQuestion($id);
         $this->findModel($id)->delete();
 
@@ -144,6 +180,14 @@ class QuizController extends Controller
 
     public function actionTest($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
+
         $result = new Result();
 
 
@@ -186,6 +230,13 @@ class QuizController extends Controller
 
     }
     public function actionTr(){
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
 
 
         return $this->render('tr');

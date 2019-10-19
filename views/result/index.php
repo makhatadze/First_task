@@ -87,9 +87,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     $count = $dataProvider->question_count;
                     $correct = $dataProvider->correct_answer;
-                    $percent = ($count / 100) * $correct;
-                    return \Yii::$app->formatter->asPercent($percent, 2);
+                    $percent = ($count ) * $correct;
+                    if($percent===100){
+                        return \Yii::$app->formatter->asPercent($percent*100, 0);
+                    }else {
+                        return \Yii::$app->formatter->asPercent($percent, 0);
 
+                    }
 
 
                 },

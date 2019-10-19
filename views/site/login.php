@@ -14,6 +14,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>Please fill out the following fields to login:</p>
+    <div id="message">
+        <h1>
+
+
+
+            <?= Yii::$app->session->getFlash('error');?>
+        </h1>
+
+    </div>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',

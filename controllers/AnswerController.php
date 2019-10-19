@@ -35,6 +35,13 @@ class AnswerController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $searchModel = new AnswerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -52,6 +59,13 @@ class AnswerController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -64,6 +78,13 @@ class AnswerController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $model = new Answer();
 
         if ($model->load(Yii::$app->request->post())){
@@ -98,6 +119,13 @@ class AnswerController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -118,6 +146,13 @@ class AnswerController extends Controller
      */
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) {
+
+            Yii::$app->session->setFlash('error', "You are not log in!");
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
