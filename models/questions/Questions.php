@@ -4,6 +4,7 @@ namespace app\models\questions;
 
 use app\models\answer\Answer;
 use app\models\Quiz;
+use app\models\User;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -17,7 +18,8 @@ use yii\db\ActiveRecord;
  * @property int $max_answers
  * @property int $created_at
  * @property int $updated_at
- *
+ * @property int $created_by
+ * @property int $updated_by
  * @property Answer[] $answers
  * @property Quiz $quiz
  */
@@ -49,7 +51,7 @@ class Questions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quiz_id', 'max_answers', 'created_at', 'updated_at'], 'integer'],
+            [['quiz_id', 'max_answers', 'created_at', 'updated_at','created_by','updated_by'], 'integer'],
             [['name','max_answers'],'required'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
@@ -69,6 +71,8 @@ class Questions extends \yii\db\ActiveRecord
             'max_answers' => 'Max Answers',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By'
         ];
     }
     public function maxQuestions($param){
@@ -101,8 +105,13 @@ class Questions extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getQuiz()
+
+    public function getCreatedBy()
     {
-        return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
+        return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
+    }
+    public function getUpdatedby()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
 }

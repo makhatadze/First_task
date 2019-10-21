@@ -38,7 +38,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'hint',
             'max_answers',
             'created_at:datetime',
+            [
+                'label' => 'Created By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getCreatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
             'updated_at:datetime',
+            [
+                'label' => 'Updated By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getUpdatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
+
         ],
     ]); ?>
     <?= GridView::widget([
@@ -61,23 +92,9 @@ $this->params['breadcrumbs'][] = $this->title;
                'value' => function($model){
                 return $model->name;
 
-
-
-
-
                }
 
-
-
-
             ],
-
-
-
-
-
-
-
 
 
             ['class' => 'yii\grid\ActionColumn',
@@ -112,11 +129,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 $icon = Html::tag('i', '', ['class' => "fa fa-$icon"]);
                 return Html::button($icon, $options);
             },*/
-
-
-
-
-
 
 
             'view' => function ($url, $model) {

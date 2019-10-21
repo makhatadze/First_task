@@ -17,7 +17,7 @@ class QuestionsSearch extends Questions
     public function rules()
     {
         return [
-            [['id', 'quiz_id', 'max_answers', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'quiz_id', 'max_answers', 'created_at', 'updated_at','created_by','updated_by'], 'integer'],
             [['name', 'hint'], 'safe'],
         ];
     }

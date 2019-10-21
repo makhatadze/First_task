@@ -71,7 +71,6 @@ class QuestionsController extends Controller
 
         }
 
-
         $searchModel = new AnswerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider -> query->where(['question_id'=>$id]);
@@ -99,23 +98,23 @@ class QuestionsController extends Controller
 
         $model = new Questions();
 
-
-
-
         if ($model->load(Yii::$app->request->post())){
-            if(Questions::maxQuestions($model->quiz_id) && $model->save()){
+            if(Questions::maxQuestions($model->quiz_id)){
+                $model->created_by = Yii::$app->user->getId();
+                $model->updated_by = Yii::$app->user->getId();
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', "Successfully created Question");
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+                else{
+                    var_dump($model->errors);
+                    exit();
+                }
 
-                Yii::$app->session->setFlash('success', "Successfully created Question");
-                return $this->redirect(['view', 'id' => $model->id]);
 
             }
             Yii::$app->session->setFlash('error', "You can't create much more Question! You can update or delete any Questions");
             return $this->redirect('create');
-
-
-
-
-
 
 
         }
@@ -145,8 +144,15 @@ class QuestionsController extends Controller
         }
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_by = Yii::$app->user->getId();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);
+                exit();
+            }
         }
 
         return $this->render('update', [
