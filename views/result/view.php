@@ -34,7 +34,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'correct_answer',
             'min_correct_answer',
             'created_at',
+            [
+                'label' => 'Created By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getCreatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
             'updated_at',
+            [
+                'label' => 'Updated By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getUpdatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
         ],
     ]) ?>
 

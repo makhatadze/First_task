@@ -12,13 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'quiz_id')->textInput() ?>
-
     <?= $form->field($model, 'correct_answer')->textInput() ?>
 
     <?= $form->field($model, 'min_correct_answer')->textInput() ?>
-
-
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

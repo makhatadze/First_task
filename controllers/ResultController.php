@@ -91,10 +91,18 @@ class ResultController extends Controller
 
 
         }
+        $model = $this->findModel($id);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_by = Yii::$app->user->getId();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);
+                exit();
+            }
         }
 
         return $this->render('update', [

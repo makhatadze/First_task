@@ -224,10 +224,9 @@ class QuizController extends Controller
             $result->correct_answer= $k;
             $result->min_correct_answer =$min_correct[$id];
             $result->question_count = $count_question;
+            $result->created_by = Yii::$app->user->getId();
+            $result->updated_by = Yii::$app->user->getId();
             $result->save();
-
-
-
             if ($min_correct[$id]<=$k) {
                 Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " .$k);
             } else {
