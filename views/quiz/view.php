@@ -36,9 +36,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'min_corect_answer',
             'created_at:datetime',
             'update_at:datetime',
-
-
             'max_question',
+            [
+                'label' => 'Created By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getCreatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
+            [
+                'label' => 'Updated By',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    $user = $model->getUpdatedBy();
+                    if(!$user){
+                        return '';
+                    }else{
+                        return $user;
+                    }
+                },
+
+            ],
         ],
     ]) ?>
     <?= GridView::widget([
@@ -103,16 +131,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $url;
                     }
                 }
-
-
-
-
-
-
-
-
-
-
 
 
 

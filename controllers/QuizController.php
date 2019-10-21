@@ -100,10 +100,19 @@ class QuizController extends Controller
 
 
         }
+
         $model = new Quiz();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_by = Yii::$app->user->getId();
+            $model->updated_by =Yii::$app->user->getId();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);
+                exit();
+            }
         }
 
         return $this->render('create', [
@@ -130,7 +139,11 @@ class QuizController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_by = Yii::$app->user->getId();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

@@ -74,31 +74,6 @@ class ResultController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Result model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        if (Yii::$app->user->isGuest) {
-
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
-
-        $model = new Result();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Updates an existing Result model.
@@ -117,7 +92,6 @@ class ResultController extends Controller
 
         }
 
-        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

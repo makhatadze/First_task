@@ -17,7 +17,7 @@ class QuizSearch extends Quiz
     public function rules()
     {
         return [
-            [['id', 'min_corect_answer', 'created_at', 'update_at', 'max_question'], 'integer'],
+            [['id', 'min_corect_answer', 'created_at', 'update_at', 'max_question','created_by','updated_by',], 'integer'],
             [['subject'], 'safe'],
         ];
     }

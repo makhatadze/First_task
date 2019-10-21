@@ -16,10 +16,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'min_corect_answer')->textInput() ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'update_at')->textInput() ?>
-
     <?= $form->field($model, 'max_question')->textInput() ?>
 
     <div class="form-group">

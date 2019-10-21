@@ -16,6 +16,8 @@ use yii\db\ActiveRecord;
  * @property int $created_at
  * @property int $update_at
  * @property int $max_question
+ *  @property int $updated_by
+ * @property int $created_by
  *
  * @property Questions[] $questions
  */
@@ -48,7 +50,7 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['min_corect_answer', 'created_at', 'update_at', 'max_question'], 'integer'],
+            [['min_corect_answer', 'created_at', 'update_at', 'max_question','created_by','updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
             [['subject','min_corect_answer','max_question'],'required'],
 
@@ -67,6 +69,8 @@ class Quiz extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'update_at' => 'Update At',
             'max_question' => 'Max Question',
+            'created_by' => 'Created by',
+            'updated_by' => 'Updated by',
         ];
     }
     public function delQuestion($param)
@@ -89,7 +93,6 @@ class Quiz extends \yii\db\ActiveRecord
 
 
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -97,4 +100,14 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Questions::className(), ['quiz_id' => 'id']);
     }
+
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
+    }
+    public function getUpdatedby()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
+    }
+
 }
