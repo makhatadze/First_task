@@ -39,10 +39,27 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Quiz', 'url' => ['/quiz/index']],
-            ['label' => 'Questions', 'url' => ['/questions/index']],
-            ['label' => 'Answers', 'url' => ['/answer/index']],
-            ['label' => 'Result', 'url' => ['/result/index']],
+            Yii::$app->user->isGuest ? (' '
+            ) : (
+            ['label' => 'Quiz', 'url' => ['/quiz/index']]
+            ),
+
+
+
+            Yii::$app->user->isGuest ? (' '
+            ) : (
+            ['label' => 'Result', 'url' => ['/result/index']]
+            ),
+            Yii::$app->user->isGuest ? (' '
+            ) : (
+                ['label' => 'Question', 'url' => ['/questions/index']]
+            ),
+            Yii::$app->user->isGuest ? (' '
+            ) : (
+            ['label' => 'Answer', 'url' => ['/answer/index']]
+            ),
+
+
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
 
@@ -57,6 +74,7 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             ),
+
             Yii::$app->user->isGuest ? (
 
                 ['label' => 'Register', 'url' => ['/site/register']]
