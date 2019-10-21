@@ -76,16 +76,8 @@ class Questions extends \yii\db\ActiveRecord
         ];
     }
     public function maxQuestions($param){
-        $rows = (new \yii\db\Query())
-            ->select(['max_question'])
-            ->from('quiz')
-            ->where(['id' => $param])
-            ->scalar();
-        $questions = (new \yii\db\Query())
-            ->select(['id'])
-            ->from('questions')
-            ->where(['quiz_id' => $param])
-            ->count();
+        $rows = Quiz::find()->where(['in','id',$param])->select('max_question')->scalar();
+        $questions = Questions::find()->where(['in','quiz_id' , $param])->count();
         if($questions>=$rows){
             return false;
         }

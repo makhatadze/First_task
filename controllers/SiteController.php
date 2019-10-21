@@ -125,6 +125,13 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        if (Yii::$app->user->isGuest) {
+
+
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -143,6 +150,13 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        if (Yii::$app->user->isGuest) {
+
+
+            return $this->redirect('http://app.test/site/login');
+
+
+        }
         return $this->render('about');
     }
 

@@ -168,10 +168,8 @@ class QuizController extends Controller
             Yii::$app->session->setFlash('error', "You are not log in!");
             return $this->redirect('http://app.test/site/login');
 
-
         }
         $subject = Quiz::find()->where(['in','id',$id])->select('subject')->scalar();
-
         $models = Result::find()->where(['in','quiz_id',$id])->all();
         foreach ($models as $model) {
             $model->quiz_name = $subject;
@@ -211,7 +209,6 @@ class QuizController extends Controller
         }
 
         $result = new Result();
-
 
         $min_correct = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','min_corect_answer');
         $quiz_name = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','subject');

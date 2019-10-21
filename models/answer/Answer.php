@@ -64,16 +64,9 @@ class Answer extends \yii\db\ActiveRecord
     }
 
     public function Maxs($param){
-        $rows = (new \yii\db\Query())
-            ->select(['max_answers'])
-            ->from('questions')
-            ->where(['id' => $param])
-            ->scalar();
-        $answer = (new \yii\db\Query())
-            ->select(['answer'])
-            ->from('answer')
-            ->where(['question_id' => $param])
-            ->count();
+
+        $rows = Questions::find()->where(['in','id',$param])->select('max_answers')->scalar();
+        $answer = Answer::find()->where(['in','question_id',$param])->count();
         if($answer>=$rows){
             return false;
         }
