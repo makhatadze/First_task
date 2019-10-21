@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int $quiz_id
+ * @property string $quiz_name
  * @property int $question_count
  * @property int $correct_ans
  * @property int $min_correct_ans
@@ -63,6 +64,7 @@ class Result extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quiz_id' => 'Quiz ID',
+            'quiz_name' => 'Quiz Name',
             'correct_answer' => 'Correct Answer',
             'min_correct_answer' => 'Min Correct Answer',
             'question_count' => 'question count',
@@ -73,12 +75,18 @@ class Result extends \yii\db\ActiveRecord
         ];
     }
 
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getQuiz()
     {
         return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
+    }
+    public function getUserName()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
     }
     public function getQuizSubject()
     {
@@ -93,12 +101,5 @@ class Result extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
-
-
-
-
-
-
-
 
 }

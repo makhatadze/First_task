@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\web\User;
 
 /**
  * TestController implements the CRUD actions for Quiz model.
@@ -161,12 +162,20 @@ class QuizController extends Controller
      */
     public function actionDelete($id)
     {
+
         if (Yii::$app->user->isGuest) {
 
             Yii::$app->session->setFlash('error', "You are not log in!");
             return $this->redirect('http://app.test/site/login');
 
 
+        }
+        $subject = Quiz::find()->where(['in','id',$id])->select('subject')->scalar();
+
+        $models = Result::find()->where(['in','quiz_id',$id])->all();
+        foreach ($models as $model) {
+            $model->quiz_name = $subject;
+            $model->update(false);
         }
         Quiz::delQuestion($id);
         $this->findModel($id)->delete();

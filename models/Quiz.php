@@ -109,5 +109,8 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
+    function getSubject(){
+        return $this->subject;
+    }
 
 }

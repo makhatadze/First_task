@@ -45,6 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
             ],
+            [
+                'label' => 'Student',
+
+                'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+                    return $dataProvider->getUserName();
+                },
+
+            ],
 
 
             [
@@ -55,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     $s = $dataProvider->getQuizSubject();
                     if(!$s){
-                        return '';
+                       return $dataProvider->quiz_name;
                     }else{
                         return $s;
                     }
