@@ -17,7 +17,7 @@ class AnswerSearch extends Answer
     public function rules()
     {
         return [
-            [['id', 'question_id', 'is_correct', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'question_id', 'is_correct', 'created_at', 'updated_at','created_by','updated_by'], 'integer'],
             [['name'], 'safe'],
         ];
     }

@@ -83,23 +83,26 @@ class AnswerController extends Controller
             Yii::$app->session->setFlash('error', "You are not log in!");
             return $this->redirect('http://app.test/site/login');
 
-
         }
         $model = new Answer();
 
         if ($model->load(Yii::$app->request->post())){
-            if(Answer::Maxs($model->question_id) && $model->save()){
+            if(Answer::Maxs($model->question_id) ){
+                $model->created_by = Yii::$app->user->getId();
+                $model->updated_by = Yii::$app->user->getId();
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', "Successfully created answer");
+                    return $this->redirect(['view', 'id' => $model->id]);
 
-                Yii::$app->session->setFlash('success', "Successfully created answer");
-                return $this->redirect(['view', 'id' => $model->id]);
+                }
+               else{
+                   var_dump($model->errors);
+                   exit();
+               }
 
             }
             Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
             return $this->redirect('create');
-
-
-
-
 
 
 
@@ -128,8 +131,15 @@ class AnswerController extends Controller
         }
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->updated_by = Yii::$app->user->getId();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else{
+                var_dump($model->errors);
+                exit();
+            }
         }
 
         return $this->render('update', [

@@ -3,6 +3,7 @@
 namespace app\models\answer;
 
 use app\models\questions\Questions;
+use app\models\User;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -16,7 +17,8 @@ use yii\web\IdentityInterface;
  * @property string $name
  * @property int $created_at
  * @property int $updated_at
- *
+ * @property int $created_by
+ * @property int $updated_by
  * @property Questions $question
  */
 class Answer extends \yii\db\ActiveRecord
@@ -54,15 +56,12 @@ class Answer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question_id', 'is_correct', 'created_at', 'updated_at'], 'integer'],
+            [['question_id', 'is_correct', 'created_at', 'updated_at','created_by','updated_by'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['name'],'required'],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::className(), 'targetAttribute' => ['question_id' => 'id']],
         ];
     }
-
-
-
 
     public function Maxs($param){
         $rows = (new \yii\db\Query())
@@ -96,6 +95,8 @@ class Answer extends \yii\db\ActiveRecord
             'name' => 'Please input answer',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
         ];
     }
 
@@ -105,5 +106,13 @@ class Answer extends \yii\db\ActiveRecord
     public function getQuestion()
     {
         return $this->hasOne(Questions::className(), ['id' => 'question_id']);
+    }
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
+    }
+    public function getUpdatedby()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
 }
