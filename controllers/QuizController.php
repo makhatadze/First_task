@@ -232,7 +232,7 @@ class QuizController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', "You failed! your correct answer is " .$k."! Min correct answer is  " .$min_correct[$id]);
             }
-            return $this->redirect(['tr' ]);
+            return $this->redirect(['result' ]);
 
         }
 
@@ -241,7 +241,7 @@ class QuizController extends Controller
     ]);
 
     }
-    public function actionTr(){
+    public function actionResult(){
         if (Yii::$app->user->isGuest) {
 
             Yii::$app->session->setFlash('error', "You are not log in!");
@@ -251,7 +251,7 @@ class QuizController extends Controller
         }
 
 
-        return $this->render('tr');
+        return $this->render('result');
     }
 
 

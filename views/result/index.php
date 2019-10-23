@@ -32,16 +32,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions'=>function ($dataProvider){
 
                     if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
-                        return ['style'=>'background-color:MediumSeaGreen'];
+                        return ['style'=>'background-color:hover;
+                        color: green;
+                        '];
                     }else{
-                        return ['style'=>'background-color:Tomato'];
+                        return ['style'=>'background-color:hover;
+                        color: red;
+                        
+                        text-style: bold;
+                        
+                  
+                        
+                        '];
                     }
 
 
                 },
 
-                'value' => function () {
-                    return '';
+                'value' => function ($dataProvider) {
+                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
+                        return 'passed';
+                    }else{
+                        return 'failed';
+                    }
                 },
 
             ],
@@ -84,28 +97,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
 
                     return "$dataProvider->correct_answer";
-
                 },
             ],
 
             [
                 'label' => 'Percent',
 
-
               'format' => 'raw',
-
                 'value' => function ($dataProvider) {
                     $count = $dataProvider->question_count;
                     $correct = $dataProvider->correct_answer;
-                    $percent = ($count ) * $correct;
-                    if($percent===100){
-                        return \Yii::$app->formatter->asPercent($percent*100, 0);
-                    }else {
+                    $percent = $correct/$count;
+
                         return \Yii::$app->formatter->asPercent($percent, 0);
-
-                    }
-
-
                 },
 
             ],
