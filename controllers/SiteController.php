@@ -98,8 +98,9 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()){
-            Yii::$app->session->addFlash('SIGNUP', 'You have successfully registered');
-            return $this->redirect(Yii::$app->homeUrl);
+            Yii::$app->session->setFlash('success', 'You have successfully registered.');
+
+            return $this->redirect('login');
         }
         return $this->render('register', [
             'model' => $model
