@@ -15,7 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>
-            <?= Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']) ?>
+            <?php
+            if(!Yii::$app->user->isGuest){
+               echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']);
+            }
+
+            ?>
         </p>
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,18 +35,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                 [
-                    'label' => 'Subject',
+                    'label' => 'Online Testing',
                     'format' => 'raw',
-                    // here comes the problem - instead of parent_region I need to have parent
+                    'visible' => !Yii::$app->user->isGuest,
                     'value' => function ($dataProvider) {
-                        return Html::a('Start test', ['test','id'=>$dataProvider->id],[
+
+                            return Html::a('Start test', ['test','id'=>$dataProvider->id],[
                                 'class' =>'btn btn-info',
-                            'data' =>[
-                              'confirm' => 'Are you sure that you want to start test?',
+                                'data' =>[
+                                    'confirm' => 'Are you sure that you want to start test?',
 
-                            ],
+                                ],
 
-                        ]);
+                            ]);
+
+
+
                     },
                 ],
                 'subject',
@@ -52,7 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 //'max-question',
 
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                        'class' => 'yii\grid\ActionColumn',
+                        'visible' => !Yii::$app->user->isGuest,
+                    ],
             ],
         ]); ?>
     </div>

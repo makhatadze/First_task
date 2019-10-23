@@ -103,33 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
           'template' => '{status}{view}{update}{delete}',
           'buttons' => [
 
-      /*        'status' => function($url, $model){
-                if($model->is_correct==1){
-                     $title = 'true';
-                     $class = 'btn btn-circle btn-success';
-                     $icon  = 'lock';
-                     $status= '3';
-                }
-                else if($model->is_correct==0){
-                    $title = 'false';
-                    $class = 'btn btn-circle btn-danger';
-                    $icon  = 'lock-open';
-                    $status= '1';
-                }
-
-
-
-                $options = [
-                    //'id' => 'sa-params',
-                    'title' => $title,
-                    'aria-label' => $title,
-                    'data-pjax' => '0',
-                    'class' => $class,
-                ];
-                $icon = Html::tag('i', '', ['class' => "fa fa-$icon"]);
-                return Html::button($icon, $options);
-            },*/
-
 
             'view' => function ($url, $model) {
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
