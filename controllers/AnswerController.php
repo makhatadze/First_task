@@ -86,24 +86,20 @@ class AnswerController extends Controller
         }
         $model = new Answer();
 
-        if ($model->load(Yii::$app->request->post())){
-            if(Answer::Maxs($model->question_id) ){
-                $model->created_by = Yii::$app->user->getId();
-                $model->updated_by = Yii::$app->user->getId();
-                if($model->save()){
+        if ($model->load(Yii::$app->request->post())) {
+            if (Answer::Maxs($model->question_id)) {
+                if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created answer");
                     return $this->redirect(['view', 'id' => $model->id]);
 
+                } else {
+                    var_dump($model->errors);
+                    exit();
                 }
-               else{
-                   var_dump($model->errors);
-                   exit();
-               }
 
             }
             Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
             return $this->redirect('create');
-
 
 
         }
@@ -131,12 +127,11 @@ class AnswerController extends Controller
         }
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) ) {
+        if ($model->load(Yii::$app->request->post())) {
             $model->updated_by = Yii::$app->user->getId();
-            if($model->save()){
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
-            }
-            else{
+            } else {
                 var_dump($model->errors);
                 exit();
             }
@@ -184,7 +179,8 @@ class AnswerController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionTest($id){
+    public function actionTest($id)
+    {
 
     }
 

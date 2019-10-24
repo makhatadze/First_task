@@ -5,6 +5,8 @@ namespace app\models;
 use app\models\answer\Answer;
 use app\models\questions\Questions;
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -35,12 +37,24 @@ class Quiz extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
+
+            [
+
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'updated_by',
+
+
+            ],
+
+            [
+
+                'class' => TimestampBehavior::className(),
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'update_at'],
                     ActiveRecord::EVENT_AFTER_UPDATE => ['update_at']
                 ],
+
             ],
         ];
     }

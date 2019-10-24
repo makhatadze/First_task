@@ -26,13 +26,12 @@ class Result extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-
+    public $certificate_time;
 
     public static function tableName()
     {
         return 'result';
     }
-
 
 
     /**

@@ -5,6 +5,8 @@ namespace app\models\answer;
 use app\models\questions\Questions;
 use app\models\User;
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -34,18 +36,27 @@ class Answer extends \yii\db\ActiveRecord
     }
 
 
-
-
-
     public function behaviors()
     {
         return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' =>[
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at','updated_at'],
+
+            [
+
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'updated_by',
+
+
+            ],
+
+            [
+
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_AFTER_UPDATE => ['updated_at']
                 ],
+
             ],
         ];
     }
@@ -56,18 +67,19 @@ class Answer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question_id', 'is_correct', 'created_at', 'updated_at','created_by','updated_by'], 'integer'],
+            [['question_id', 'is_correct', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['name'],'required'],
+            [['name'], 'required'],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::className(), 'targetAttribute' => ['question_id' => 'id']],
         ];
     }
 
-    public function Maxs($param){
+    public function Maxs($param)
+    {
 
-        $rows = Questions::find()->where(['in','id',$param])->select('max_answers')->scalar();
-        $answer = Answer::find()->where(['in','question_id',$param])->count();
-        if($answer>=$rows){
+        $rows = Questions::find()->where(['in', 'id', $param])->select('max_answers')->scalar();
+        $answer = Answer::find()->where(['in', 'question_id', $param])->count();
+        if ($answer >= $rows) {
             return false;
         }
         return true;
@@ -100,10 +112,12 @@ class Answer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Questions::className(), ['id' => 'question_id']);
     }
+
     public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
     }
+
     public function getUpdatedby()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();

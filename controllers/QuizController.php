@@ -2,23 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\answer\Answer;
-use app\models\answer\AnswerSearch;
 use app\models\questions\Questions;
 use app\models\questions\QuestionsSearch;
-use app\models\Result;
-use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
-use yii\base\Model;
-use yii\data\Pagination;
-use yii\db\Query;
+use app\models\Result;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use yii\web\User;
 
 /**
  * TestController implements the CRUD actions for Quiz model.
@@ -91,18 +84,13 @@ class QuizController extends Controller
     public function actionCreate()
     {
         if (Yii::$app->user->isGuest) {
-
             Yii::$app->session->setFlash('error', "You are not log in!");
             return $this->redirect('http://app.test/site/login');
-
-
         }
 
         $model = new Quiz();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->created_by = Yii::$app->user->getId();
-            $model->updated_by = Yii::$app->user->getId();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -196,56 +184,57 @@ class QuizController extends Controller
     public function actionTest($id)
     {
         if (Yii::$app->user->isGuest) {
-
             Yii::$app->session->setFlash('error', "You are not log in!");
             return $this->redirect('http://app.test/site/login');
-
-
         }
 
         $result = new Result();
 
         $min_correct = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'min_corect_answer');
-        $quiz_name = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'subject');
+        $quizName = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'subject');
         $count_question = Questions::find()->where(['in', 'quiz_id', $id])->count();
 
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
         if (Yii::$app->request->post()) {
+
             $correct = Yii::$app->request->post();
             $k = 0;
-
             foreach ($correct as $key => $item) {
-
                 if ($correct[$key] == 1) {
                     $k += 1;
                 }
-
             }
-            $quiz_name =Quiz::find()->where(['in','id',$id])->select('subject')->scalar();
-            $valid_time =Quiz::find()->where(['in','id',$id])->select('certificate_valid_time')->scalar() ;
-            $month = "+" . $valid_time . " month";
+
+            $quizName = Quiz::find()
+                ->where(['id' => $id])
+                ->select('subject')
+                ->scalar();
+
+            $validTime = Quiz::find()
+                ->where(['id' => $id])
+                ->select('certificate_valid_time')
+                ->scalar();
+
+            $month = "+" . $validTime . " month";
             $result->created_at = time();
             $result->certificate_valid_time = strtotime($month, $result->created_at);
             $result->correct_answer = $k;
             $result->min_correct_answer = $min_correct[$id];
             $result->question_count = $count_question;
             $result->created_by = Yii::$app->user->getId();
-            $result->quiz_name = $quiz_name;
-            if($result->save()){
+            $result->quiz_name = $quizName;
+            if ($result->save()) {
 
 
-
-
-            if ($min_correct[$id] <= $k) {
-                Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
+                if ($min_correct[$id] <= $k) {
+                    Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
+                } else {
+                    Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $k . "! Min correct answer is  " . $min_correct[$id]);
+                }
+                return $this->redirect(['result']);
             } else {
-                Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $k . "! Min correct answer is  " . $min_correct[$id]);
-            }
-            return $this->redirect(['result']);
-            }
-            else{
-                 var_dump($result->errors);
-                 exit();
+                var_dump($result->errors);
+                exit();
             }
 
         }

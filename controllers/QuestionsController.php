@@ -100,8 +100,6 @@ class QuestionsController extends Controller
 
         if ($model->load(Yii::$app->request->post())){
             if(Questions::maxQuestions($model->quiz_id)){
-                $model->created_by = Yii::$app->user->getId();
-                $model->updated_by = Yii::$app->user->getId();
                 if($model->save()){
                     Yii::$app->session->setFlash('success', "Successfully created Question");
                     return $this->redirect(['view', 'id' => $model->id]);
