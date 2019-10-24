@@ -28,14 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'label' => 'Status',
-                'contentOptions'=>function ($dataProvider){
+                'contentOptions' => function ($dataProvider) {
 
-                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
-                        return ['style'=>'background-color:hover;
+                    if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
+                        return ['style' => 'background-color:hover;
                         color: green;
                         '];
-                    }else{
-                        return ['style'=>'background-color:hover;
+                    } else {
+                        return ['style' => 'background-color:hover;
                         color: red;
                         
                         text-style: bold;
@@ -49,9 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
                 'value' => function ($dataProvider) {
-                    if($dataProvider->correct_answer>=$dataProvider->min_correct_answer){
+                    if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
                         return 'passed';
-                    }else{
+                    } else {
                         return 'failed';
                     }
                 },
@@ -75,12 +75,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
-                    $s = $dataProvider->getQuizSubject();
-                    if(!$s){
-                       return $dataProvider->quiz_name;
-                    }else{
-                        return $s;
+                    if(!$dataProvider->quiz_name){
+                        return '';
                     }
+                    return $dataProvider->quiz_name;
 
                 },
 
@@ -102,13 +100,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Percent',
 
-              'format' => 'raw',
+                'format' => 'raw',
                 'value' => function ($dataProvider) {
                     $count = $dataProvider->question_count;
                     $correct = $dataProvider->correct_answer;
-                    $percent = $correct/$count;
+                    $percent = $correct / $count;
 
-                        return \Yii::$app->formatter->asPercent($percent, 0);
+                    return \Yii::$app->formatter->asPercent($percent, 0);
                 },
 
             ],
@@ -140,7 +138,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
             ],
-
 
 
         ],

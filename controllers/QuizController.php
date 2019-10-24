@@ -221,12 +221,10 @@ class QuizController extends Controller
                 }
 
             }
-            $result->quiz_id = $id;
             $result->correct_answer = $k;
             $result->min_correct_answer = $min_correct[$id];
             $result->question_count = $count_question;
             $result->created_by = Yii::$app->user->getId();
-            $result->updated_by = Yii::$app->user->getId();
             $result->save();
             if ($min_correct[$id] <= $k) {
                 Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
@@ -256,39 +254,5 @@ class QuizController extends Controller
 
         return $this->render('result');
     }
-
-    public function actionVito()
-    {
-
-        $settings = Questions::find()->indexBy('id')->all();
-
-        $model = new Answer();
-
-
-        if (Yii::$app->request->post()) {
-            $set = Yii::$app->request->post();
-
-
-            foreach ($set as $key => $item) {
-                $k[$key] = $key;
-                $l[$key] = $item;
-            }
-            var_dump($set);
-            exit();
-
-        }
-
-        /*   if(Yii::$app->request->post()){
-           $set = Yii::$app->request->post();
-           var_dump($set);
-           exit();
-       }*/
-
-        return $this->render('vito', ['settings' => $settings,
-            'model' => $model,]);
-
-
-    }
-
 
 }
