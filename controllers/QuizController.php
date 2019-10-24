@@ -221,17 +221,32 @@ class QuizController extends Controller
                 }
 
             }
+            $quiz_name =Quiz::find()->where(['in','id',$id])->select('subject')->scalar();
+            $valid_time =Quiz::find()->where(['in','id',$id])->select('certificate_valid_time')->scalar() ;
+            $month = "+" . $valid_time . " month";
+            $result->created_at = time();
+            $result->certificate_valid_time = strtotime($month, $result->created_at);
             $result->correct_answer = $k;
             $result->min_correct_answer = $min_correct[$id];
             $result->question_count = $count_question;
             $result->created_by = Yii::$app->user->getId();
-            $result->save();
+            $result->quiz_name = $quiz_name;
+            if($result->save()){
+
+
+
+
             if ($min_correct[$id] <= $k) {
                 Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
             } else {
                 Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $k . "! Min correct answer is  " . $min_correct[$id]);
             }
             return $this->redirect(['result']);
+            }
+            else{
+                 var_dump($result->errors);
+                 exit();
+            }
 
         }
 

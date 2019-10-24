@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
-                    if(!$dataProvider->quiz_name){
+                    if (!$dataProvider->quiz_name) {
                         return '';
                     }
                     return $dataProvider->quiz_name;
@@ -104,16 +104,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     $count = $dataProvider->question_count;
                     $correct = $dataProvider->correct_answer;
-                    $percent = $correct / $count;
+                    if ($count != 0) {
 
-                    return \Yii::$app->formatter->asPercent($percent, 0);
+                        $percent = $correct / $count;
+
+                        return \Yii::$app->formatter->asPercent($percent, 0);
+                    }
+                    return '0%';
                 },
 
             ],
 
 
             [
-                'label' => 'Minimum correct answer',
+                'label' => 'Min-correct answer',
 
                 'format' => 'raw',
 
@@ -134,6 +138,38 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
 
                     return Yii::$app->formatter->asDate($dataProvider->created_at);
+
+                },
+
+            ],
+            [
+                'label' => 'Certificate status',
+                'contentOptions' => function ($dataProvider) {
+
+                    if ($dataProvider->certificate_valid_time > time()) {
+                        return ['style' => 'background-color:hover;
+                        color: green;
+                        '];
+                    } else {
+                        return ['style' => 'background-color:hover;
+                        color: red;
+                        
+                        text-style: bold;
+                                          
+                        '];
+                    }
+
+                },
+
+                'format' => 'raw',
+
+                'value' => function ($dataProvider) {
+
+                    if ($dataProvider->certificate_valid_time > time()) {
+                        return 'Active';
+                    } else {
+                        return 'Inactive';
+                    }
 
                 },
 

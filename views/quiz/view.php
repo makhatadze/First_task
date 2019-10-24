@@ -67,6 +67,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
             ],
+            [
+                'label' => 'Certificate time',
+
+                'format' => 'raw',
+
+                'value' => function ($model) {
+                    return "$model->certificate_valid_time Month";
+                },
+
+            ],
         ],
     ]) ?>
     <?= GridView::widget([

@@ -18,6 +18,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'max_question')->textInput() ?>
 
+    <?= $form->field($model, 'certificate_valid_time')->dropDownList(
+        ['24' => '2 Year',
+            '18' => '1.5 Year',
+            '12' => '12 month',
+            '6' => '6 month',
+            '3' => '3 month',
+            '1' => '1 month',
+
+        ]
+
+    )
+    ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

@@ -16,8 +16,9 @@ use yii\db\ActiveRecord;
  * @property int $created_at
  * @property int $update_at
  * @property int $max_question
- *  @property int $updated_by
+ * @property int $updated_by
  * @property int $created_by
+ * @property int $certificate_valid_time
  *
  * @property Questions[] $questions
  */
@@ -36,8 +37,8 @@ class Quiz extends \yii\db\ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' =>[
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at','update_at'],
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'update_at'],
                     ActiveRecord::EVENT_AFTER_UPDATE => ['update_at']
                 ],
             ],
@@ -50,9 +51,9 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['min_corect_answer', 'created_at', 'update_at', 'max_question','created_by','updated_by'], 'integer'],
+            [['certificate_valid_time', 'min_corect_answer', 'created_at', 'update_at', 'max_question', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
-            [['subject','min_corect_answer','max_question'],'required'],
+            [['subject', 'min_corect_answer', 'max_question'], 'required'],
 
         ];
     }
@@ -71,8 +72,10 @@ class Quiz extends \yii\db\ActiveRecord
             'max_question' => 'Max Question',
             'created_by' => 'Created by',
             'updated_by' => 'Updated by',
+            'certificate_valid_time' => 'Certificate Time',
         ];
     }
+
     public function delQuestion($param)
     {
 
@@ -81,18 +84,19 @@ class Quiz extends \yii\db\ActiveRecord
             ->from('questions')
             ->where(['quiz_id' => $param])
             ->scalar();
-        $answers = Answer::find()->where(['in','question_id',$question_id])->all();
-        foreach ($answers as $answer){
+        $answers = Answer::find()->where(['in', 'question_id', $question_id])->all();
+        foreach ($answers as $answer) {
             $answer->delete();
         }
 
-        $questions = Questions::find()->where(['in','quiz_id',$param])->all();
-         foreach ($questions as $question) {
-             $question->delete();
-         }
+        $questions = Questions::find()->where(['in', 'quiz_id', $param])->all();
+        foreach ($questions as $question) {
+            $question->delete();
+        }
 
 
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -105,11 +109,14 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
     }
+
     public function getUpdatedby()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
-    function getSubject(){
+
+    function getSubject()
+    {
         return $this->subject;
     }
 

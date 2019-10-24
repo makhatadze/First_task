@@ -26,25 +26,14 @@ class Result extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public $certificate_time;
+
 
     public static function tableName()
     {
         return 'result';
     }
 
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at','certificate_valid_time']
 
-                ],
-            ],
-        ];
-    }
 
     /**
      * {@inheritdoc}
