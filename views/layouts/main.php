@@ -41,13 +41,14 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            Yii::$app->user->isGuest ? (' '
-            ) : (
-            ['label' => 'Quiz', 'url' => ['/quiz/index']]
-            ),
+
             Yii::$app->user->isGuest ? (' '
             ) : (
             ['label' => 'Result', 'url' => ['/result/index']]
+            ),
+            Yii::$app->user->isGuest ? (' '
+            ) : (
+            ['label' => 'Quiz', 'url' => ['/quiz/index']]
             ),
             Yii::$app->user->isGuest ? (' '
             ) : (

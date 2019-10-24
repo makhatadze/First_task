@@ -36,13 +36,7 @@ class ResultController extends Controller
     public function actionIndex()
     {
 
-        if (Yii::$app->user->isGuest) {
 
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
 
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
