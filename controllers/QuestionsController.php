@@ -24,6 +24,23 @@ class QuestionsController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['create', 'update', 'test', 'view', 'delete'],
+                'rules' => [
+                    // deny all POST requests
+                    [
+                        'allow' => false,
+                        'verbs' => ['POST']
+                    ],
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -39,13 +56,7 @@ class QuestionsController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
 
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
         $searchModel = new QuestionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -63,17 +74,9 @@ class QuestionsController extends Controller
      */
     public function actionView($id)
     {
-        if (Yii::$app->user->isGuest) {
-
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
-
         $searchModel = new AnswerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider -> query->where(['question_id'=>$id]);
+        $dataProvider->query->where(['question_id' => $id]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -88,23 +91,15 @@ class QuestionsController extends Controller
      */
     public function actionCreate()
     {
-        if (Yii::$app->user->isGuest) {
-
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
 
         $model = new Questions();
 
-        if ($model->load(Yii::$app->request->post())){
-            if(Questions::maxQuestions($model->quiz_id)){
-                if($model->save()){
+        if ($model->load(Yii::$app->request->post())) {
+            if (Questions::maxQuestions($model->quiz_id)) {
+                if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created Question");
                     return $this->redirect(['view', 'id' => $model->id]);
-                }
-                else{
+                } else {
                     var_dump($model->errors);
                     exit();
                 }
@@ -133,21 +128,14 @@ class QuestionsController extends Controller
      */
     public function actionUpdate($id)
     {
-        if (Yii::$app->user->isGuest) {
 
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
-        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->updated_by = Yii::$app->user->getId();
-            if($model->save()){
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
-            }
-            else{
+            } else {
                 var_dump($model->errors);
                 exit();
             }
@@ -167,17 +155,11 @@ class QuestionsController extends Controller
      */
     public function actionDelete($id)
     {
-        if (Yii::$app->user->isGuest) {
 
-            Yii::$app->session->setFlash('error', "You are not log in!");
-            return $this->redirect('http://app.test/site/login');
-
-
+        $answers = Answer::find()->where(['in', 'question_id', $id])->all();
+        foreach ($answers as $answer) {
+            $answer->delete();
         }
-        $answers = Answer::find()->where(['in','question_id',$id])->all();
-            foreach ($answers as $answer) {
-                $answer->delete();
-            }
         $this->findModel($id)->delete();
 
 
