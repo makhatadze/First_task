@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -28,7 +29,6 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 
-
 <div class="wrap">
     <?php
     NavBar::begin([
@@ -51,7 +51,7 @@ AppAsset::register($this);
             ),
             Yii::$app->user->isGuest ? (' '
             ) : (
-                ['label' => 'Question', 'url' => ['/questions/index']]
+            ['label' => 'Question', 'url' => ['/questions/index']]
             ),
             Yii::$app->user->isGuest ? (' '
             ) : (
@@ -60,7 +60,7 @@ AppAsset::register($this);
 
 
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+            ['label' => 'Login', 'url' => ['/site/login']]
 
 
             ) : (
@@ -68,7 +68,10 @@ AppAsset::register($this);
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
+                    ['class' => 'btn btn-link logout'
+
+                    ]
+
                 )
                 . Html::endForm()
                 . '</li>'
@@ -76,7 +79,7 @@ AppAsset::register($this);
 
             Yii::$app->user->isGuest ? (
 
-                ['label' => 'Register', 'url' => ['/site/register']]
+            ['label' => 'Register', 'url' => ['/site/register']]
 
             ) : ''
 

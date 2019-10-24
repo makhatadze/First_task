@@ -54,10 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 'subject',
-
                 'min_corect_answer',
-                'created_at:datetime',
-                'update_at:datetime',
+                'created_at:date',
+                'update_at:date',
 
                 //'max-question',
 

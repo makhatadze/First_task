@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'layout' => '{items}',
-
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -142,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+
 
         ],
 

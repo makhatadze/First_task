@@ -14,7 +14,6 @@ use yii\widgets\Pjax;
 
 <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true]]); ?>
 <?php foreach ($questions as $question): ?>
-
     <div class="container">
         <div class="row">
             <br/>

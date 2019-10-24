@@ -10,6 +10,7 @@ use app\models\Result;
 use Yii;
 use app\models\Quiz;
 use app\models\QuizSearch;
+use yii\base\Model;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -38,6 +39,7 @@ class QuizController extends Controller
             ],
         ];
     }
+
 
     /**
      * Lists all Quiz models.
@@ -73,7 +75,7 @@ class QuizController extends Controller
 
         $searchModel = new QuestionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider -> query->where(['quiz_id'=>$id]);
+        $dataProvider->query->where(['quiz_id' => $id]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -100,11 +102,10 @@ class QuizController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->getId();
-            $model->updated_by =Yii::$app->user->getId();
-            if($model->save()){
+            $model->updated_by = Yii::$app->user->getId();
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
-            }
-            else{
+            } else {
                 var_dump($model->errors);
                 exit();
             }
@@ -136,7 +137,7 @@ class QuizController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->updated_by = Yii::$app->user->getId();
-            if($model->save()){
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
             return $this->redirect(['view', 'id' => $model->id]);
@@ -163,8 +164,8 @@ class QuizController extends Controller
             return $this->redirect('http://app.test/site/login');
 
         }
-        $subject = Quiz::find()->where(['in','id',$id])->select('subject')->scalar();
-        $models = Result::find()->where(['in','quiz_id',$id])->all();
+        $subject = Quiz::find()->where(['in', 'id', $id])->select('subject')->scalar();
+        $models = Result::find()->where(['in', 'quiz_id', $id])->all();
         foreach ($models as $model) {
             $model->quiz_name = $subject;
             $model->update(false);
@@ -204,44 +205,46 @@ class QuizController extends Controller
 
         $result = new Result();
 
-        $min_correct = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','min_corect_answer');
-        $quiz_name = ArrayHelper::map(Quiz::find()->where(['in','id',$id])->all(),'id','subject');
-        $count_question = Questions::find()->where(['in','quiz_id',$id])->count();
+        $min_correct = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'min_corect_answer');
+        $quiz_name = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'subject');
+        $count_question = Questions::find()->where(['in', 'quiz_id', $id])->count();
 
-        $questions = Questions::find()->where(['in','quiz_id',$id])->all();
-        if(Yii::$app->request->post()){
+        $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
+        if (Yii::$app->request->post()) {
             $correct = Yii::$app->request->post();
             $k = 0;
 
-            foreach ($correct as $key=> $item) {
+            foreach ($correct as $key => $item) {
 
-                if($correct[$key]==1){
-                    $k+= 1;
+                if ($correct[$key] == 1) {
+                    $k += 1;
                 }
 
             }
             $result->quiz_id = $id;
-            $result->correct_answer= $k;
-            $result->min_correct_answer =$min_correct[$id];
+            $result->correct_answer = $k;
+            $result->min_correct_answer = $min_correct[$id];
             $result->question_count = $count_question;
             $result->created_by = Yii::$app->user->getId();
             $result->updated_by = Yii::$app->user->getId();
             $result->save();
-            if ($min_correct[$id]<=$k) {
-                Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " .$k);
+            if ($min_correct[$id] <= $k) {
+                Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
             } else {
-                Yii::$app->session->setFlash('error', "You failed! your correct answer is " .$k."! Min correct answer is  " .$min_correct[$id]);
+                Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $k . "! Min correct answer is  " . $min_correct[$id]);
             }
-            return $this->redirect(['result' ]);
+            return $this->redirect(['result']);
 
         }
 
         return $this->render('test', [
-            'questions' =>$questions,
-    ]);
+            'questions' => $questions,
+        ]);
 
     }
-    public function actionResult(){
+
+    public function actionResult()
+    {
         if (Yii::$app->user->isGuest) {
 
             Yii::$app->session->setFlash('error', "You are not log in!");
@@ -252,6 +255,39 @@ class QuizController extends Controller
 
 
         return $this->render('result');
+    }
+
+    public function actionVito()
+    {
+
+        $settings = Questions::find()->indexBy('id')->all();
+
+        $model = new Answer();
+
+
+        if (Yii::$app->request->post()) {
+            $set = Yii::$app->request->post();
+
+
+            foreach ($set as $key => $item) {
+                $k[$key] = $key;
+                $l[$key] = $item;
+            }
+            var_dump($set);
+            exit();
+
+        }
+
+        /*   if(Yii::$app->request->post()){
+           $set = Yii::$app->request->post();
+           var_dump($set);
+           exit();
+       }*/
+
+        return $this->render('vito', ['settings' => $settings,
+            'model' => $model,]);
+
+
     }
 
 
