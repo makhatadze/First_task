@@ -68,6 +68,7 @@ class Quiz extends \yii\db\ActiveRecord
             [['certificate_valid_time', 'min_corect_answer', 'created_at', 'update_at', 'max_question', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
+            [['subject'],'unique'],
 
         ];
     }
@@ -98,19 +99,9 @@ class Quiz extends \yii\db\ActiveRecord
             ->from('questions')
             ->where(['quiz_id' => $param])
             ->scalar();
-        $answers = Answer::find()->where(['in', 'question_id', $question_id])->all();
-        $questions = Questions::find()->where(['in', 'quiz_id', $param])->all();
-        if ($answers) {
-            foreach ($answers as $answer) {
-                $answer->delete();
-            }
-            if ($questions) {
-                foreach ($questions as $question) {
-                    $question->delete();
-                }
-            }
+        Answer::deleteAll(['question_id'=>$question_id]);
+        Questions::deleteAll(['quiz_id' => $param]);
 
-        };
 
     }
 

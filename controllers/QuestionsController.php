@@ -156,12 +156,8 @@ class QuestionsController extends Controller
     public function actionDelete($id)
     {
 
-        $answers = Answer::find()->where(['in', 'question_id', $id])->all();
-        foreach ($answers as $answer) {
-            $answer->delete();
-        }
+        Answer::deleteAll(['question_id' => $id]);
         $this->findModel($id)->delete();
-
 
         return $this->redirect(['index']);
     }

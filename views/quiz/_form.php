@@ -20,7 +20,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'certificate_valid_time')->dropDownList(
         ['24' => '2 Year',
-            '18' => '1.5 Year',
             '12' => '12 month',
             '6' => '6 month',
             '3' => '3 month',

@@ -27,7 +27,7 @@ class QuizController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update', 'test', 'view', 'delete'],
+                'only' => ['create', 'index', 'update', 'test', 'view', 'delete'],
                 'rules' => [
                     // deny all POST requests
                     [
@@ -99,7 +99,7 @@ class QuizController extends Controller
 
         $model = new Quiz();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {

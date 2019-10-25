@@ -14,11 +14,11 @@ class gridAction extends \yii\grid\ActionColumn
      */
     protected function initDefaultButtons()
     {
-        $this->initDefaultButton('view', 'eye-open',[
+        $this->initDefaultButton('view', 'eye-open', [
             'class' => 'btn btn-info',
             'style' => 'width: 31%'
         ]);
-        $this->initDefaultButton('update', 'pencil',[
+        $this->initDefaultButton('update', 'pencil', [
             'class' => 'btn btn-warning',
             'style' => 'width: 31%'
         ]);
