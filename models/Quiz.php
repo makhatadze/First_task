@@ -99,15 +99,18 @@ class Quiz extends \yii\db\ActiveRecord
             ->where(['quiz_id' => $param])
             ->scalar();
         $answers = Answer::find()->where(['in', 'question_id', $question_id])->all();
-        foreach ($answers as $answer) {
-            $answer->delete();
-        }
-
         $questions = Questions::find()->where(['in', 'quiz_id', $param])->all();
-        foreach ($questions as $question) {
-            $question->delete();
-        }
+        if ($answers) {
+            foreach ($answers as $answer) {
+                $answer->delete();
+            }
+            if ($questions) {
+                foreach ($questions as $question) {
+                    $question->delete();
+                }
+            }
 
+        };
 
     }
 

@@ -164,14 +164,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
 
                 'value' => function ($dataProvider) {
+                    $certificateTime = $dataProvider->certificate_valid_time;
                     $validTime = Yii::$app->formatter->asDate($dataProvider->certificate_valid_time);
 
-                    if ($dataProvider->certificate_valid_time > time()) {
+                    if ($certificateTime && $dataProvider->certificate_valid_time > time()) {
                         return "Valid  ($validTime)";
-                    } else if (!$validTime) {
+                    } else if ($certificateTime && $dataProvider->certificate_valid_time < time()) {
                         return "Invalid ($validTime)";
                     } else {
-                        return "Invalid";
+                        return '';
                     }
 
                 },

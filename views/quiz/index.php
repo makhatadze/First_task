@@ -10,63 +10,58 @@ use yii\grid\GridView;
 $this->title = 'Quizzes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-    <div class="quiz-index">
+<div class="quiz-index">
 
-        <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-        <p>
-            <?php
-            if(!Yii::$app->user->isGuest){
-               echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']);
-            }
+    <p>
+        <?php
+        if (!Yii::$app->user->isGuest) {
+            echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']);
+        }
 
-            ?>
-        </p>
+        ?>
+    </p>
 
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
-                [
-                    'label' => 'Online Testing',
-                    'format' => 'raw',
-                    'visible' => !Yii::$app->user->isGuest,
-                    'value' => function ($dataProvider) {
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
 
-                            return Html::a('Start test', ['test','id'=>$dataProvider->id],[
-                                'class' =>'btn btn-info',
-                                'data' =>[
-                                    'confirm' => 'Are you sure that you want to start test?',
-
-                                ],
-
-                            ]);
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
 
+            [
+                'label' => 'Online Testing',
+                'format' => 'raw',
+                'visible' => !Yii::$app->user->isGuest,
+                'value' => function ($dataProvider) {
 
-                    },
-                ],
-                'subject',
-                'min_corect_answer',
-                'created_at:date',
-                'update_at:date',
+                    return Html::a('Start test', ['test', 'id' => $dataProvider->id], [
+                        'class' => 'btn btn-info',
+                        'data' => [
+                            'confirm' => 'Are you sure that you want to start test?',
 
-                //'max-question',
+                        ],
 
-                [
-                        'class' => 'yii\grid\ActionColumn',
-                        'visible' => !Yii::$app->user->isGuest,
+                    ]);
 
 
-
-                    ],
+                },
             ],
-        ]); ?>
-    </div>
+            'subject',
+            'min_corect_answer',
+            'created_at:date',
+            'update_at:date',
+
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+
+            ],
+        ],
+    ]); ?>
+</div>

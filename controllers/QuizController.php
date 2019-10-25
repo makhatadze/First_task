@@ -31,7 +31,7 @@ class QuizController extends Controller
                 'rules' => [
                     // deny all POST requests
                     [
-                        'allow' => false,
+                        'allow' => true,
                         'verbs' => ['POST']
                     ],
                     // allow authenticated users
@@ -149,13 +149,6 @@ class QuizController extends Controller
     public function actionDelete($id)
     {
 
-
-        $subject = Quiz::find()->where(['in', 'id', $id])->select('subject')->scalar();
-        $models = Result::find()->where(['in', 'quiz_id', $id])->all();
-        foreach ($models as $model) {
-            $model->quiz_name = $subject;
-            $model->update(false);
-        }
         Quiz::delQuestion($id);
         $this->findModel($id)->delete();
 
@@ -171,7 +164,9 @@ class QuizController extends Controller
      */
     protected function findModel($id)
     {
-
+        if (($model = Quiz::findOne($id)) !== null) {
+            return $model;
+        }
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
@@ -208,11 +203,14 @@ class QuizController extends Controller
 
             $month = "+" . $validTime . " month";
             $result->created_at = time();
-            $result->certificate_valid_time = strtotime($month, $result->created_at);
             $result->correct_answer = $k;
             $result->min_correct_answer = $min_correct[$id];
             $result->question_count = $count_question;
             $result->created_by = Yii::$app->user->getId();
+            if ($min_correct[$id] <= $k) {
+                $result->certificate_valid_time = strtotime($month, $result->created_at);
+            }
+
             $result->quiz_name = $quizName;
             if ($result->save()) {
 

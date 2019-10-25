@@ -30,7 +30,7 @@ class QuestionsController extends Controller
                 'rules' => [
                     // deny all POST requests
                     [
-                        'allow' => false,
+                        'allow' => true,
                         'verbs' => ['POST']
                     ],
                     // allow authenticated users
