@@ -90,7 +90,7 @@ class Questions extends \yii\db\ActiveRecord
         ];
     }
 
-    public function maxQuestions($param)
+    public function maxQuestion($param)
     {
         $rows = Quiz::find()->where(['in', 'id', $param])->select('max_question')->scalar();
         $questions = Questions::find()->where(['in', 'quiz_id', $param])->count();
@@ -98,8 +98,6 @@ class Questions extends \yii\db\ActiveRecord
             return false;
         }
         return true;
-
-
     }
 
     /**

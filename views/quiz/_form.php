@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'min_corect_answer')->textInput() ?>
+    <?= $form->field($model, 'min_corect_answer')->textInput()->label('Minimum Correct answer')?>
 
-    <?= $form->field($model, 'max_question')->textInput() ?>
+    <?= $form->field($model, 'max_question')->textInput()->label('Maximal Question') ?>
 
     <?= $form->field($model, 'certificate_valid_time')->dropDownList(
         ['24' => '2 Year',
@@ -24,18 +24,15 @@ use yii\widgets\ActiveForm;
             '6' => '6 month',
             '3' => '3 month',
             '1' => '1 month',
-
         ]
-
     )
     ?>
-
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
-
 </div>
+
+
 
 

@@ -26,7 +26,7 @@ class QuestionsController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update', 'test', 'view', 'delete'],
+                'only' => ['create', 'update', 'view', 'delete'],
                 'rules' => [
                     // deny all POST requests
                     [
@@ -50,21 +50,6 @@ class QuestionsController extends Controller
         ];
     }
 
-    /**
-     * Lists all Questions models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-
-        $searchModel = new QuestionsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
      * Displays a single Questions model.
@@ -95,7 +80,7 @@ class QuestionsController extends Controller
         $model = new Questions();
 
         if ($model->load(Yii::$app->request->post())) {
-            if (Questions::maxQuestions($model->quiz_id)) {
+            if (Questions::maxQuestion($model->quiz_id)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created Question");
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -103,22 +88,14 @@ class QuestionsController extends Controller
                     var_dump($model->errors);
                     exit();
                 }
-
-
             }
             Yii::$app->session->setFlash('error', "You can't create much more Question! You can update or delete any Questions");
             return $this->redirect('create');
-
-
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
-
-
     }
-
     /**
      * Updates an existing Questions model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -128,7 +105,6 @@ class QuestionsController extends Controller
      */
     public function actionUpdate($id)
     {
-
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -140,7 +116,6 @@ class QuestionsController extends Controller
                 exit();
             }
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);

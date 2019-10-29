@@ -79,6 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+</div>
+    <h1>Question</h1>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
 
@@ -94,57 +96,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->name;
 
                 }
-
             ],
-
-
-
-
-
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\widgets\GridAction',
                 'header' => 'Actions',
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                'template' => '{status}{view}{update}{delete}',
-                'buttons' => [
+                'template' => '{view}{update}{delete}',
+                'urlCreator' => function ($action, $model) {
+                   return "/questions/$action?id=" . $model->id;
 
-                    'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-view'),
-
-                        ]);
-                    },
-
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-update'),
-                        ]);
-                    },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-delete'),
-                        ]);
-                    }
-
-                ],
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
-                        $url ='http://app.test/questions/view?id='.$model->id;
-                        return $url;
-                    }
-
-                    if ($action === 'update') {
-                        $url ='http://app.test/questions/update?id='.$model->id;
-                        return $url;
-                    }
-                    if ($action === 'delete') {
-                        $url ='http://app.test/questions/delete?id='.$model->id;
-                        return $url;
-                    }
                 }
-
-
-
-
             ],
         ],
     ]); ?>

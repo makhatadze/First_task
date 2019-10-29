@@ -22,7 +22,7 @@ class AnswerController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['create', 'update', 'view', 'delete', 'index'],
+                'only' => ['create', 'update', 'view', 'delete'],
                 'rules' => [
                     // deny all POST requests
                     [
@@ -45,23 +45,6 @@ class AnswerController extends Controller
             ],
         ];
     }
-
-    /**
-     * Lists all Answer models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-
-        $searchModel = new AnswerSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     /**
      * Displays a single Answer model.
      * @param integer $id
@@ -87,7 +70,7 @@ class AnswerController extends Controller
         $model = new Answer();
 
         if ($model->load(Yii::$app->request->post())) {
-            if (Answer::Maxs($model->question_id)) {
+            if (Answer::maxAnswerCount($model->question_id)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created answer");
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -100,10 +83,7 @@ class AnswerController extends Controller
             }
             Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
             return $this->redirect('create');
-
-
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -130,7 +110,6 @@ class AnswerController extends Controller
                 exit();
             }
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -166,10 +145,4 @@ class AnswerController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-    public function actionTest($id)
-    {
-
-    }
-
 }

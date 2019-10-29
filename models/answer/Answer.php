@@ -74,7 +74,7 @@ class Answer extends \yii\db\ActiveRecord
         ];
     }
 
-    public function Maxs($param)
+    public function maxAnswerCount($param)
     {
 
         $rows = Questions::find()->where(['in', 'id', $param])->select('max_answers')->scalar();

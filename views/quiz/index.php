@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             [
-                'class' => 'app\widgets\gridAction',
+                'class' => 'app\widgets\GridAction',
 
             ],
         ],

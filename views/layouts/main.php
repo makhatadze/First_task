@@ -50,14 +50,6 @@ AppAsset::register($this);
             ) : (
             ['label' => 'Quiz', 'url' => ['/quiz/index']]
             ),
-            Yii::$app->user->isGuest ? (' '
-            ) : (
-            ['label' => 'Question', 'url' => ['/questions/index']]
-            ),
-            Yii::$app->user->isGuest ? (' '
-            ) : (
-            ['label' => 'Answer', 'url' => ['/answer/index']]
-            ),
 
 
             Yii::$app->user->isGuest ? (
