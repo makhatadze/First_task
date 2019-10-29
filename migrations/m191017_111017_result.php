@@ -24,7 +24,7 @@ class m191017_111017_result extends Migration
 
         $this->addForeignKey
         (
-            'FK_result_quiz_quiz_id', '{{result}}','quiz_id','{{quiz}}','id'
+            'FK_result_quiz_quiz_id', '{{result}}','quiz_id','{{quiz}}','id','SET NULL'
         );
 
     }
