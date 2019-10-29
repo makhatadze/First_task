@@ -10,14 +10,11 @@ use yii\widgets\DetailView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->name;
-
-$this->params['breadcrumbs'][] = ['label' => 'Questions', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="questions-view">
 
-    <h1><?= Html::encode('name') ?></h1>
+    <h1><?= Html::encode($model->name) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
         ]) ?>
-        <?= Html::a('Create Answer', ['answer/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create new Question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -73,21 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
+    <h2>Answers</h2>
+    <?= Html::a('Create new answer', ['answer/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'rowOptions' => function ($model) {
-            if ($model->is_correct == 0) {
-                return ['style' => 'background-color:#FF7F50;'];
-            } elseif ($model->is_correct == 1) {
-                return ['style' => 'background-color:#ADFF2F'];
-            }
-        },
-
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn',
-
-
-            ],
+            ['class' => 'yii\grid\SerialColumn'],
 
             ['attribute' => 'Answers',
                 'value' => function ($model) {
@@ -96,53 +85,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
 
             ],
+            ['attribute' => 'Status',
+                'value' => function ($model) {
+                    if ($model->is_correct) {
+                        return 'Correct';
+                    }
+                    return 'Incorrect';
+                }
+            ],
 
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'app\widgets\GridAction',
                 'header' => 'Actions',
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                'template' => '{status}{view}{update}{delete}',
-                'buttons' => [
+                'template' => '{view}{update}{delete}',
 
-
-                    'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-view'),
-
-                        ]);
-                    },
-
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-update'),
-                        ]);
-                    },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                            'title' => Yii::t('app', 'lead-delete'),
-                        ]);
-                    }
-
-                ],
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
-                        $url = 'http://app.test/answer/view?id=' . $model->id;
-                        return $url;
-                    }
-
-                    if ($action === 'update') {
-                        $url = 'http://app.test/answer/update?id=' . $model->id;
-                        return $url;
-                    }
-                    if ($action === 'delete') {
-                        $url = 'http://app.test/answer/delete?id=' . $model->id;
-                        return $url;
-                    }
+                    return "/answer/$action?id=" . $model->id;
                 }
-
             ],
         ],
     ]); ?>
-
-
 </div>

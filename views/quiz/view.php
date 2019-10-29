@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('create question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
 
     </p>
 
@@ -44,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'value' => function ($model) {
                     $user = $model->getCreatedBy();
-                    if(!$user){
+                    if (!$user) {
                         return '';
-                    }else{
+                    } else {
                         return $user;
                     }
                 },
@@ -59,9 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'value' => function ($model) {
                     $user = $model->getUpdatedBy();
-                    if(!$user){
+                    if (!$user) {
                         return '';
-                    }else{
+                    } else {
                         return $user;
                     }
                 },
@@ -80,37 +80,31 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 </div>
-    <h1>Question</h1>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+<h2>Questions</h2>
+<?= Html::a('create new question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn',
 
-
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn',
-
-
-            ],
-
-            [   'attribute' => 'Questions',
-                'value' => function($model){
-                    return $model->name;
-
-                }
-            ],
-            ['class' => 'app\widgets\GridAction',
-                'header' => 'Actions',
-                'headerOptions' => ['style' => 'color:#337ab7'],
-                'template' => '{view}{update}{delete}',
-                'urlCreator' => function ($action, $model) {
-                   return "/questions/$action?id=" . $model->id;
-
-                }
-            ],
         ],
-    ]); ?>
+        ['attribute' => 'Question',
+            'value' => function ($model) {
+                return $model->name;
 
+            }
+        ],
+        ['class' => 'app\widgets\GridAction',
+            'header' => 'Actions',
+            'headerOptions' => ['style' => 'color:#337ab7'],
+            'template' => '{view}{update}{delete}',
+            'urlCreator' => function ($action, $model) {
+                return "/questions/$action?id=" . $model->id;
 
-
+            }
+        ],
+    ],
+]); ?>
 </div>
 
 

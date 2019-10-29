@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'min_corect_answer')->textInput()->label('Minimum Correct answer')?>
 
-    <?= $form->field($model, 'max_question')->textInput()->label('Maximal Question') ?>
+    <?= $form->field($model, 'max_question')->textInput()->label('Maximum Question') ?>
 
     <?= $form->field($model, 'certificate_valid_time')->dropDownList(
         ['24' => '2 Year',

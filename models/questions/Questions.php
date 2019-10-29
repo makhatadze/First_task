@@ -80,7 +80,7 @@ class Questions extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quiz_id' => 'Select quiz subject',
-            'name' => 'Please input question',
+            'name' => 'Question title',
             'hint' => 'Hint',
             'max_answers' => 'Max Answers',
             'created_at' => 'Created At',

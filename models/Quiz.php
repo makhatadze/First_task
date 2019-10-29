@@ -39,12 +39,9 @@ class Quiz extends \yii\db\ActiveRecord
         return [
 
             [
-
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-
-
             ],
 
             [
@@ -68,7 +65,8 @@ class Quiz extends \yii\db\ActiveRecord
             [['certificate_valid_time', 'min_corect_answer', 'created_at', 'update_at', 'max_question', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
-            [['subject'],'unique'],
+            [['subject'], 'unique'],
+            ['max_question', 'compare', 'compareValue' => 'min_correct_answer', 'message' => 'Maximum question count must be more than minimum correct answer']
 
         ];
     }
@@ -99,9 +97,8 @@ class Quiz extends \yii\db\ActiveRecord
             ->from('questions')
             ->where(['quiz_id' => $param])
             ->scalar();
-        Answer::deleteAll(['question_id'=>$question_id]);
+        Answer::deleteAll(['question_id' => $question_id]);
         Questions::deleteAll(['quiz_id' => $param]);
-
 
     }
 
