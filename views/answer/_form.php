@@ -22,9 +22,8 @@ use yii\widgets\ActiveForm;
         )
     ?>
 
-    <?= $form->field($model, 'is_correct')->checkBox(['label' => 'active', 'selected' => $model->is_correct]) ?>
-
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'is_correct')->checkBox(['label' => 'correct', 'selected' => $model->is_correct]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

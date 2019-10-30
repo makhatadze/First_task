@@ -73,19 +73,20 @@ class AnswerController extends Controller
         $model->question_id = $id;
 
         if ($model->load(Yii::$app->request->post())) {
-            if (Answer::maxAnswerCount($model->question_id)) {
+            if (Answer::maxAnswerCount($model->question_id) == 0) {
+                Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
+            }else if (Answer::correctAnswerCount($id,$model->is_correct) == 0){
+                Yii::$app->session->setFlash('error', "You can't create one more correct answer! ");
+            }else{
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created answer");
                     return $this->redirect(['questions/view', 'id' => $id]);
 
                 } else {
-                    var_dump($model->errors);
+                    echo($model->errors);
                     exit();
                 }
-
             }
-            Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
-
         }
         return $this->render('create', [
             'model' => $model,

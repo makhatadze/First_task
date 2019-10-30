@@ -60,10 +60,11 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['certificate_valid_time', 'min_corect_answer', 'created_at', 'update_at', 'max_question', 'created_by', 'updated_by'], 'integer'],
+            [['certificate_valid_time', 'min_corect_answer', 'max_question', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
+
         ];
     }
 
@@ -120,4 +121,28 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->subject;
     }
+    function questionValidate(){
+        $questionCount = $this->hasMany(Questions::className(),['quiz_id' =>'id'])->count();
+        if($questionCount == 0){
+            return false;
+        }
+        return true;
+    }
+    function answerValidate($id){
+        $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
+        $validate = true;
+        foreach ($questions as $question){
+            if(!$question->answers){
+                $validate = false;
+            }
+            else {
+                $validate = true;
+            }
+        }
+        return $validate;
+    }
+    function correctValidate(){
+
+    }
+
 }

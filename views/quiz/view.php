@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
-</div>
+
 <h2>Questions</h2>
 <?= Html::a('create new question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
 <?= GridView::widget([

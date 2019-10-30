@@ -77,13 +77,37 @@ class Answer extends \yii\db\ActiveRecord
     public function maxAnswerCount($param)
     {
 
-        $rows = Questions::find()->where(['in', 'id', $param])->select('max_answers')->scalar();
-        $answer = Answer::find()->where(['in', 'question_id', $param])->count();
+        $rows = Questions::find()
+            ->where(['in', 'id', $param])
+            ->select('max_answers')
+            ->scalar();
+        $answer = Answer::find()
+            ->where(['in', 'question_id', $param])
+            ->count();
         if ($answer >= $rows) {
             return false;
         }
         return true;
+    }
 
+    public function correctAnswerCount($id,$is_correct)
+    {
+        $count =0;
+        $answers = Answer::find()
+            ->where(['question_id' => $id])
+            ->all();
+        foreach ($answers as $answer){
+           $count += $answer->is_correct;
+        }
+        $count += $is_correct;
+        if($is_correct == 0){
+            return true;
+        }else if
+       ($count == 0){
+           return true;
+       }else {
+            return false;
+        }
 
     }
 

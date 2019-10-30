@@ -21,10 +21,7 @@ use yii\widgets\Pjax;
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <?php
-
                         echo $question->name;
-
-
                         ?>
                     </div>
 

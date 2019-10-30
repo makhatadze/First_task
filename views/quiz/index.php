@@ -1,5 +1,7 @@
 <?php
 
+use dosamigos\datepicker\DatePicker;
+use dosamigos\datepicker\DateRangePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -53,15 +55,39 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'subject',
-            'min_corect_answer',
-            'created_at:date',
-            'update_at:date',
-
-
+           'min_corect_answer',
             [
-                'class' => 'app\widgets\GridAction',
+                'attribute'=>'Created At',
+                'value' => function($dataProvider){
+                    return Yii::$app->formatter->asDate($dataProvider->created_at);
+                },
+                'format' => 'date',
 
+                'filter'=>DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute'=>'created_at',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                    ]
+                ])
             ],
+            [
+                'attribute'=>'Updated At',
+                'value' => function($dataProvider){
+                    return Yii::$app->formatter->asDate($dataProvider->update_at);
+                },
+
+                'filter'=>DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute'=>'update_at',
+                    'clientOptions' => [
+                        'autoclose' => true,
+
+                    ]
+                ])
+            ],
+            [
+                'class' => 'app\widgets\GridAction',],
         ],
     ]); ?>
 </div>
