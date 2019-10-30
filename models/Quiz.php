@@ -43,9 +43,7 @@ class Quiz extends \yii\db\ActiveRecord
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
             ],
-
             [
-
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'update_at'],
@@ -66,8 +64,6 @@ class Quiz extends \yii\db\ActiveRecord
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
-            ['max_question', 'compare', 'compareValue' => 'min_correct_answer', 'message' => 'Maximum question count must be more than minimum correct answer']
-
         ];
     }
 
@@ -89,7 +85,7 @@ class Quiz extends \yii\db\ActiveRecord
         ];
     }
 
-    public function delQuestion($param)
+    public function deleteQuestion($param)
     {
 
         $question_id = (new \yii\db\Query())
@@ -124,5 +120,4 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->subject;
     }
-
 }

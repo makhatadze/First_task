@@ -14,174 +14,152 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="result-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <?php if ($count === 0): ?>
+        <div>
+            <h1>There is no any result</h1>
+        </div>
+    <?php endif; ?>
+</div
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'layout' => '{items}',
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
 
+        [
+            'label' => 'Status',
+            'contentOptions' => function ($dataProvider) {
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'layout' => '{items}',
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            [
-                'label' => 'Status',
-                'contentOptions' => function ($dataProvider) {
-
-                    if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
-                        return ['style' => 'background-color:hover;
+                if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
+                    return ['style' => 'background-color:hover;
                         color: green;
                         '];
-                    } else {
-                        return ['style' => 'background-color:hover;
-                        color: red;
-                        
+                } else {
+                    return ['style' => 'background-color:hover;
+                        color: red;                        
                         text-style: bold;
-                        
-                  
-                        
+                            
                         '];
-                    }
+                }
+            },
+            'value' => function ($dataProvider) {
+                if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
+                    return 'passed';
+                } else {
+                    return 'failed';
+                }
+            },
+        ],
+        [
+            'label' => 'Student',
+            'format' => 'raw',
+            'value' => function ($dataProvider) {
+                return $dataProvider->getUserName();
+            },
+
+        ],
+        [
+            'label' => 'Quiz Name',
+            'format' => 'raw',
+            'value' => function ($dataProvider) {
+                if (!$dataProvider->quiz_name) {
+                    return '';
+                }
+                return $dataProvider->quiz_name;
+            },
+        ],
+        [
+            'label' => 'Correct Answer',
+            'format' => 'raw',
+            'value' => function ($dataProvider) {
+
+                return "$dataProvider->correct_answer";
+            },
+        ],
+        [
+            'label' => 'Percent',
+            'format' => 'raw',
+            'value' => function ($dataProvider) {
+                $count = $dataProvider->question_count;
+                $correct = $dataProvider->correct_answer;
+                if ($count != 0) {
+
+                    $percent = $correct / $count;
+
+                    return \Yii::$app->formatter->asPercent($percent, 0);
+                }
+                return '0%';
+            },
+
+        ],
 
 
-                },
+        [
+            'label' => 'Min-correct answer',
 
-                'value' => function ($dataProvider) {
-                    if ($dataProvider->correct_answer >= $dataProvider->min_correct_answer) {
-                        return 'passed';
-                    } else {
-                        return 'failed';
-                    }
-                },
+            'format' => 'raw',
 
-            ],
-            [
-                'label' => 'Student',
+            'value' => function ($dataProvider) {
 
-                'format' => 'raw',
+                return "$dataProvider->min_correct_answer";
 
-                'value' => function ($dataProvider) {
-                    return $dataProvider->getUserName();
-                },
+            },
 
-            ],
+        ],
 
 
-            [
-                'label' => 'Quiz Name',
+        [
+            'label' => 'Passed Time',
 
-                'format' => 'raw',
+            'format' => 'raw',
 
-                'value' => function ($dataProvider) {
-                    if (!$dataProvider->quiz_name) {
-                        return '';
-                    }
-                    return $dataProvider->quiz_name;
+            'value' => function ($dataProvider) {
 
-                },
+                return Yii::$app->formatter->asDate($dataProvider->created_at);
 
-            ],
+            },
 
+        ],
+        [
+            'label' => 'Certificate status',
+            'contentOptions' => function ($dataProvider) {
 
-            [
-                'label' => 'Correct Answer',
-
-
-                'format' => 'raw',
-
-                'value' => function ($dataProvider) {
-
-                    return "$dataProvider->correct_answer";
-                },
-            ],
-
-            [
-                'label' => 'Percent',
-
-                'format' => 'raw',
-                'value' => function ($dataProvider) {
-                    $count = $dataProvider->question_count;
-                    $correct = $dataProvider->correct_answer;
-                    if ($count != 0) {
-
-                        $percent = $correct / $count;
-
-                        return \Yii::$app->formatter->asPercent($percent, 0);
-                    }
-                    return '0%';
-                },
-
-            ],
-
-
-            [
-                'label' => 'Min-correct answer',
-
-                'format' => 'raw',
-
-                'value' => function ($dataProvider) {
-
-                    return "$dataProvider->min_correct_answer";
-
-                },
-
-            ],
-
-
-            [
-                'label' => 'Passed Time',
-
-                'format' => 'raw',
-
-                'value' => function ($dataProvider) {
-
-                    return Yii::$app->formatter->asDate($dataProvider->created_at);
-
-                },
-
-            ],
-            [
-                'label' => 'Certificate status',
-                'contentOptions' => function ($dataProvider) {
-
-                    if ($dataProvider->certificate_valid_time > time()) {
-                        return ['style' => 'background-color:hover;
+                if ($dataProvider->certificate_valid_time > time()) {
+                    return ['style' => 'background-color:hover;
                         color: green;
                         '];
-                    } else {
-                        return ['style' => 'background-color:hover;
+                } else {
+                    return ['style' => 'background-color:hover;
                         color: red;
                         
                         text-style: bold;
                                           
                         '];
-                    }
+                }
 
-                },
+            },
 
-                'format' => 'raw',
+            'format' => 'raw',
 
-                'value' => function ($dataProvider) {
-                    $certificateTime = $dataProvider->certificate_valid_time;
-                    $validTime = Yii::$app->formatter->asDate($dataProvider->certificate_valid_time);
+            'value' => function ($dataProvider) {
+                $certificateTime = $dataProvider->certificate_valid_time;
+                $validTime = Yii::$app->formatter->asDate($dataProvider->certificate_valid_time);
 
-                    if (!$certificateTime) {
-                        return '';
-                    } elseif ($dataProvider->certificate_valid_time > time()) {
-                        return "Valid  ($validTime) ";
-                    } else {
-                        return "Invalid ($validTime)";
-                    }
-                },
-
-            ],
-
+                if (!$certificateTime) {
+                    return '';
+                } elseif ($dataProvider->certificate_valid_time > time()) {
+                    return "Valid  ($validTime) ";
+                } else {
+                    return "Invalid ($validTime)";
+                }
+            },
 
         ],
 
-    ]); ?>
+
+    ],
+
+]); ?>
 
 
-</div>
+

@@ -67,6 +67,44 @@ class Result extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
     }
+    function createResult($dataResult,$id,$result){
+        $quizName = Quiz::find()
+            ->where(['id' => $id])
+            ->select('subject')
+            ->scalar();
+        $validTime = Quiz::find()
+            ->where(['id' => $id])
+            ->select('certificate_valid_time')
+            ->scalar();
+        $minCorrect = Quiz::find()
+            ->where(['id' => $id])
+            ->select('min_corect_answer')
+            ->scalar();
+        $questionCount= Questions::find()
+            ->where(['in', 'quiz_id', $id])
+            ->count();
+
+        $data =$dataResult;
+        $correctAnswer = 0;
+        foreach ($data as $key => $item) {
+            if ($data[$key] == 1) {
+                $correctAnswer += 1;
+            }
+        }
+        $month = "+" . $validTime . " month";
+        $result->created_at = time();
+        $result->correct_answer = $correctAnswer;
+        $result->min_correct_answer = $minCorrect;
+        $result->question_count = $questionCount;
+        $result->created_by = Yii::$app->user->getId();
+        $result->quiz_name = $quizName;
+        if ($minCorrect <= $correctAnswer) {
+            $result->certificate_valid_time = strtotime($month, $result->created_at);
+        }
+
+        return $result;
+    }
+
 
 
 }

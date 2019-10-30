@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Create new answer', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create new answer', ['create', 'id' => $model->question_id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'value' => function ($model) {
                     $user = $model->getCreatedBy();
-                    if(!$user){
+                    if (!$user) {
                         return '';
-                    }else{
+                    } else {
                         return $user;
                     }
                 },
@@ -57,9 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'value' => function ($model) {
                     $user = $model->getUpdatedBy();
-                    if(!$user){
+                    if (!$user) {
                         return '';
-                    }else{
+                    } else {
                         return $user;
                     }
                 },

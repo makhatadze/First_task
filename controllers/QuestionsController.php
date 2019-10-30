@@ -76,15 +76,16 @@ class QuestionsController extends Controller
      */
     public function actionCreate($id)
     {
+
         $model = new Questions();
         $model->quiz_id = $id;
         if ($model->load(Yii::$app->request->post())) {
             if (Questions::maxQuestion($model->quiz_id)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created Question");
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['/quiz/view', 'id' => $model->quiz_id]);
                 } else {
-                    var_dump($model->errors);
+                    echo ($model->errors);
                     exit();
                 }
             }
@@ -130,11 +131,15 @@ class QuestionsController extends Controller
      */
     public function actionDelete($id)
     {
+        $quizId = Questions::find()
+            ->where(['id' => $id])
+            ->select('quiz_id')
+            ->scalar();
 
         Answer::deleteAll(['question_id' => $id]);
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['quiz/view', 'id' => $quizId]);
     }
 
     /**

@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'min_corect_answer')->textInput()->label('Minimum Correct answer')?>
+    <?= $form->field($model, 'min_corect_answer')->textInput()->label('Minimum Correct answer') ?>
 
     <?= $form->field($model, 'max_question')->textInput()->label('Maximum Question') ?>
 
@@ -32,7 +32,3 @@ use yii\widgets\ActiveForm;
     </div>
     <?php ActiveForm::end(); ?>
 </div>
-
-
-
-

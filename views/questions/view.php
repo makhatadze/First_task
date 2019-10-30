@@ -26,7 +26,7 @@ $this->title = $model->name;
 
             ],
         ]) ?>
-        <?= Html::a('Create new Question', ['questions/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+
     </p>
 
     <?= DetailView::widget([

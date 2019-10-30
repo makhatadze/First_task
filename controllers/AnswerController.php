@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\questions\Questions;
 use Yii;
 use app\models\answer\Answer;
 use app\models\answer\AnswerSearch;
@@ -45,6 +46,7 @@ class AnswerController extends Controller
             ],
         ];
     }
+
     /**
      * Displays a single Answer model.
      * @param integer $id
@@ -74,7 +76,7 @@ class AnswerController extends Controller
             if (Answer::maxAnswerCount($model->question_id)) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Successfully created answer");
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['questions/view', 'id' => $id]);
 
                 } else {
                     var_dump($model->errors);
@@ -83,7 +85,7 @@ class AnswerController extends Controller
 
             }
             Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
-            return $this->redirect('create');
+
         }
         return $this->render('create', [
             'model' => $model,
@@ -126,9 +128,14 @@ class AnswerController extends Controller
     public function actionDelete($id)
     {
 
+        $question_id = Answer::find()
+            ->where(['id' => $id])
+            ->select('question_id')
+            ->scalar();
+
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['questions/view', 'id' => $question_id]);
     }
 
     /**

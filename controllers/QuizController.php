@@ -149,7 +149,7 @@ class QuizController extends Controller
     public function actionDelete($id)
     {
 
-        Quiz::delQuestion($id);
+        Quiz::deleteQuestion($id);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -170,59 +170,26 @@ class QuizController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
     public function actionTest($id)
     {
-
         $result = new Result();
-
-        $min_correct = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'min_corect_answer');
-        $quizName = ArrayHelper::map(Quiz::find()->where(['in', 'id', $id])->all(), 'id', 'subject');
-        $count_question = Questions::find()->where(['in', 'quiz_id', $id])->count();
-
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
         if (Yii::$app->request->post()) {
 
-            $correct = Yii::$app->request->post();
-            $k = 0;
-            foreach ($correct as $key => $item) {
-                if ($correct[$key] == 1) {
-                    $k += 1;
-                }
-            }
 
-            $quizName = Quiz::find()
-                ->where(['id' => $id])
-                ->select('subject')
-                ->scalar();
+            $result->createResult(Yii::$app->request->post(), $id, $result);
 
-            $validTime = Quiz::find()
-                ->where(['id' => $id])
-                ->select('certificate_valid_time')
-                ->scalar();
-
-            $month = "+" . $validTime . " month";
-            $result->created_at = time();
-            $result->correct_answer = $k;
-            $result->min_correct_answer = $min_correct[$id];
-            $result->question_count = $count_question;
-            $result->created_by = Yii::$app->user->getId();
-            if ($min_correct[$id] <= $k) {
-                $result->certificate_valid_time = strtotime($month, $result->created_at);
-            }
-
-            $result->quiz_name = $quizName;
             if ($result->save()) {
 
 
-                if ($min_correct[$id] <= $k) {
-                    Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $k);
+                if ($result->certificate_valid_time) {
+                    Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $result->correct_answer);
                 } else {
-                    Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $k . "! Min correct answer is  " . $min_correct[$id]);
+                    Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $result->correct_answer . "! Min correct answer is  " . $result->min_correct_answer);
                 }
                 return $this->redirect(['result']);
             } else {
-                var_dump($result->errors);
+                echo($result->errors);
                 exit();
             }
 

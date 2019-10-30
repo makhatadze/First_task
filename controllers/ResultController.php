@@ -35,15 +35,15 @@ class ResultController extends Controller
      */
     public function actionIndex()
     {
-
-
-
         $searchModel = new ResultSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $count = Result::find()->count();
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'count' => $count,
         ]);
     }
 
