@@ -61,13 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($dataProvider){
                     return Yii::$app->formatter->asDate($dataProvider->created_at);
                 },
-                'format' => 'date',
-
+                'format' => 'raw',
                 'filter'=>DatePicker::widget([
                     'model' => $searchModel,
                     'attribute'=>'created_at',
                     'clientOptions' => [
                         'autoclose' => true,
+                        'format' => 'yyyy-mm-dd'
                     ]
                 ])
             ],

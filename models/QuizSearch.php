@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Faker\Calculator\TCNo;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Quiz;
@@ -44,13 +45,39 @@ class QuizSearch extends Quiz
     {
         $query = Quiz::find();
 
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $this->load($params);
+        if($this->load($params))
+            if($this->created_at){
+                $createStart = strtotime($this->created_at);
+                $createEnd = $createStart + 86400;
+                $query->andFilterWhere([
+                    'between', 'created_at', $createStart, $createEnd
+                ]);
+                $query->andFilterWhere([
+                    'id' => $this->id,
+                    'min_corect_answer' => $this->min_corect_answer,
+                ]);
+                $query->andFilterWhere(['like', 'subject', $this->subject]);
+
+            }
+            if($this->update_at){
+                $updateStart = strtotime($this->update_at);
+                $updateEnd = $updateStart + 86400;
+                $query->andFilterWhere([
+                    'between', 'update_at', $updateStart, $updateEnd
+                ]);
+                $query->andFilterWhere([
+                    'id' => $this->id,
+                    'min_corect_answer' => $this->min_corect_answer,
+                ]);
+                $query->andFilterWhere(['like', 'subject', $this->subject]);
+            }
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -62,9 +89,6 @@ class QuizSearch extends Quiz
         $query->andFilterWhere([
             'id' => $this->id,
             'min_corect_answer' => $this->min_corect_answer,
-            'created_at' => $this->created_at,
-            'update_at' => $this->update_at,
-
         ]);
 
         $query->andFilterWhere(['like', 'subject', $this->subject]);

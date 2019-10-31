@@ -66,11 +66,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = Quiz::find()->asArray()->all();
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->redirect('result/index');
     }
 
     /**

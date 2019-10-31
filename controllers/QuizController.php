@@ -215,7 +215,20 @@ class QuizController extends Controller
     public function actionResult()
     {
 
-        return $this->render('result');
+        $model = new Result();
+        $date = "2019-10-29";
+        $k = Yii::$app->formatter->asDatetime($date);
+        echo $k;
+        var_dump(strtotime('2019-10-30'));
+        var_dump(strtotime($date));
+        exit();
+        if($model->load(Yii::$app->request->post())){
+            var_dump(strtotime ($model->date));
+            exit();
+        }
+        return $this->render('result',[
+            'model' => $model,
+        ]);
     }
 
 }

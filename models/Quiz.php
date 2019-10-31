@@ -47,7 +47,7 @@ class Quiz extends \yii\db\ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'update_at'],
-                    ActiveRecord::EVENT_AFTER_UPDATE => ['update_at']
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['update_at']
                 ],
 
             ],
@@ -64,6 +64,8 @@ class Quiz extends \yii\db\ActiveRecord
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
+            ['min_corect_answer', 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
+
 
         ];
     }

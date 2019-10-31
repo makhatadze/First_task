@@ -75,7 +75,7 @@ class AnswerController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if (Answer::maxAnswerCount($model->question_id) == 0) {
                 Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
-            }else if (Answer::correctAnswerCount($id,$model->is_correct) == 0){
+            }else if ($model->is_correct ==1 && Answer::correctAnswerCount($id,$model->is_correct) == true){
                 Yii::$app->session->setFlash('error', "You can't create one more correct answer! ");
             }else{
                 if ($model->save()) {

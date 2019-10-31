@@ -1,4 +1,6 @@
-<div id="message">
+
+
+    <div id="message">
 
     <h1>
     <?= Yii::$app->session->getFlash('success');?>
@@ -10,4 +12,3 @@
     </h1>
 
 </div>
-

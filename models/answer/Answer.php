@@ -96,14 +96,12 @@ class Answer extends \yii\db\ActiveRecord
         $answers = Answer::find()
             ->where(['question_id' => $id])
             ->all();
-        foreach ($answers as $answer){
-           $count += $answer->is_correct;
+        if($answers){
+            foreach ($answers as $answer){
+                $count += $answer->is_correct;
+            }
         }
-        $count += $is_correct;
-        if($is_correct == 0){
-            return true;
-        }else if
-       ($count == 0){
+        if ($count >= 1){
            return true;
        }else {
             return false;
