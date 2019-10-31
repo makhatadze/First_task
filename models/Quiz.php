@@ -64,9 +64,9 @@ class Quiz extends \yii\db\ActiveRecord
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_corect_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
-            ['min_corect_answer', 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
-
-
+            ['max_question', 'compare', 'compareAttribute' => 'min_corect_answer', 'operator' => '>=', 'type' => 'number'],
+            [['min_corect_answer', 'max_question'], 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
+            ['max_question', 'compare', 'compareValue' => $this->count(), 'operator' => '>=', 'type' => 'number'],
         ];
     }
 
@@ -88,6 +88,15 @@ class Quiz extends \yii\db\ActiveRecord
         ];
     }
 
+    public function count()
+    {
+        $count = Questions::find()
+            ->where(['quiz_id' => $this->id])
+            ->count();
+        return $count;
+    }
+
+
     public function deleteQuestion($param)
     {
 
@@ -104,6 +113,7 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+
     public function getQuestions()
     {
         return $this->hasMany(Questions::className(), ['quiz_id' => 'id']);
@@ -123,27 +133,32 @@ class Quiz extends \yii\db\ActiveRecord
     {
         return $this->subject;
     }
-    function questionValidate(){
-        $questionCount = $this->hasMany(Questions::className(),['quiz_id' =>'id'])->count();
-        if($questionCount == 0){
+
+    function questionValidate()
+    {
+        $questionCount = $this->hasMany(Questions::className(), ['quiz_id' => 'id'])->count();
+        if ($questionCount == 0) {
             return false;
         }
         return true;
     }
-    function answerValidate($id){
+
+    function answerValidate($id)
+    {
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
         $validate = true;
-        foreach ($questions as $question){
-            if(!$question->answers){
+        foreach ($questions as $question) {
+            if (!$question->answers) {
                 $validate = false;
-            }
-            else {
+            } else {
                 $validate = true;
             }
         }
         return $validate;
     }
-    function correctValidate(){
+
+    function correctValidate()
+    {
 
     }
 

@@ -52,7 +52,7 @@ class QuizSearch extends Quiz
             'query' => $query,
         ]);
 
-        if($this->load($params))
+        $this->load($params);
             if($this->created_at){
                 $createStart = strtotime($this->created_at);
                 $createEnd = $createStart + 86400;
@@ -64,7 +64,6 @@ class QuizSearch extends Quiz
                     'min_corect_answer' => $this->min_corect_answer,
                 ]);
                 $query->andFilterWhere(['like', 'subject', $this->subject]);
-
             }
             if($this->update_at){
                 $updateStart = strtotime($this->update_at);

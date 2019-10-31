@@ -69,6 +69,8 @@ class Questions extends \yii\db\ActiveRecord
             [['name', 'max_answers'], 'required'],
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
+            ['max_answers', 'compare', 'compareValue' => $this->countAnswer(), 'operator' => '>=', 'type' => 'number'],
+
         ];
     }
 
@@ -88,6 +90,13 @@ class Questions extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_by' => 'Updated By'
         ];
+    }
+    public function countAnswer()
+    {
+        $count = Answer::find()
+            ->where(['question_id' => $this->id])
+            ->count();
+        return $count;
     }
 
     public function maxQuestion($param)

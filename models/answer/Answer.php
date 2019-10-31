@@ -71,9 +71,9 @@ class Answer extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['name'], 'required'],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::className(), 'targetAttribute' => ['question_id' => 'id']],
+
         ];
     }
-
     public function maxAnswerCount($param)
     {
 

@@ -25,17 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-
+    <div id="message">
+        <h1>
+            <?= Yii::$app->session->getFlash('success'); ?>
+        </h1>
+    </div>
+    <div id="message">
+        <h1>
+            <?= Yii::$app->session->getFlash('error'); ?>
+        </h1>
+    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
 
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-
             [
                 'label' => 'Online Testing',
                 'format' => 'raw',
@@ -46,25 +52,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'btn btn-info',
                         'data' => [
                             'confirm' => 'Are you sure that you want to start test?',
-
                         ],
-
                     ]);
-
-
                 },
             ],
             'subject',
-           'min_corect_answer',
+            'min_corect_answer',
             [
-                'attribute'=>'Created At',
-                'value' => function($dataProvider){
+                'attribute' => 'Created At',
+                'value' => function ($dataProvider) {
                     return Yii::$app->formatter->asDate($dataProvider->created_at);
                 },
                 'format' => 'raw',
-                'filter'=>DatePicker::widget([
+                'filter' => DatePicker::widget([
                     'model' => $searchModel,
-                    'attribute'=>'created_at',
+                    'attribute' => 'created_at',
                     'clientOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd'
@@ -72,14 +74,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])
             ],
             [
-                'attribute'=>'Updated At',
-                'value' => function($dataProvider){
+                'attribute' => 'Updated At',
+                'value' => function ($dataProvider) {
                     return Yii::$app->formatter->asDate($dataProvider->update_at);
                 },
 
-                'filter'=>DatePicker::widget([
+                'filter' => DatePicker::widget([
                     'model' => $searchModel,
-                    'attribute'=>'update_at',
+                    'attribute' => 'update_at',
                     'clientOptions' => [
                         'autoclose' => true,
 

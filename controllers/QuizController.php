@@ -198,7 +198,7 @@ class QuizController extends Controller
                 } else {
                     Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $result->correct_answer . "! Min correct answer is  " . $result->min_correct_answer);
                 }
-                return $this->redirect(['result']);
+                return $this->redirect(['result/index']);
             } else {
                 echo($result->errors);
                 exit();
@@ -212,23 +212,6 @@ class QuizController extends Controller
 
     }
 
-    public function actionResult()
-    {
 
-        $model = new Result();
-        $date = "2019-10-29";
-        $k = Yii::$app->formatter->asDatetime($date);
-        echo $k;
-        var_dump(strtotime('2019-10-30'));
-        var_dump(strtotime($date));
-        exit();
-        if($model->load(Yii::$app->request->post())){
-            var_dump(strtotime ($model->date));
-            exit();
-        }
-        return $this->render('result',[
-            'model' => $model,
-        ]);
-    }
 
 }
