@@ -79,19 +79,20 @@ class QuestionsController extends Controller
 
         $model = new Questions();
         $model->quiz_id = $id;
-        if ($model->load(Yii::$app->request->post())) {
-            if (Questions::maxQuestion($model->quiz_id)) {
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Successfully created Question");
-                    return $this->redirect(['/quiz/view', 'id' => $model->quiz_id]);
-                } else {
-                    echo ($model->errors);
-                    exit();
-                }
-            }
-            Yii::$app->session->setFlash('error', "You can't create much more Question! You can update or delete any Questions");
-            return $this->redirect('create');
+        if (!Questions::maxQuestion($model->quiz_id)) {
+            Yii::$app->session->setFlash('error', "You can't create much more Question! You can update or delete any Question");
+            return $this->redirect(['/quiz/view', 'id' => $model->quiz_id]);
         }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', "Successfully created Question");
+                return $this->redirect(['/quiz/view', 'id' => $model->quiz_id]);
+            } else {
+                echo($model->errors);
+                exit();
+            }
+        }
+
         return $this->render('create', [
             'model' => $model,
         ]);

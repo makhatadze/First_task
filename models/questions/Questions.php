@@ -32,18 +32,12 @@ class Questions extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-
             [
-
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
-
-
             ],
-
             [
-
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
@@ -70,7 +64,7 @@ class Questions extends \yii\db\ActiveRecord
             [['name', 'hint'], 'string', 'max' => 255],
             [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
             ['max_answers', 'compare', 'compareValue' => $this->countAnswer(), 'operator' => '>=', 'type' => 'number'],
-
+            ['max_answers', 'compare', 'compareValue' => 1, 'operator' => '>', 'type' => 'number'],
         ];
     }
 
@@ -91,6 +85,7 @@ class Questions extends \yii\db\ActiveRecord
             'updated_by' => 'Updated By'
         ];
     }
+
     public function countAnswer()
     {
         $count = Answer::find()
@@ -129,5 +124,21 @@ class Questions extends \yii\db\ActiveRecord
     public function getUpdatedby()
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
+    }
+    public function questionStatus(){
+        $answers = $this->hasMany(Answer::className(),['question_id' => 'id'])->all();
+        $countAnswer = $this->hasMany(Answer::className(),['question_id' => 'id'])->count();
+        $correct = 0;
+        if($countAnswer <= 1){
+            return false;
+        }   else {
+            foreach ($answers as $answer){
+                $correct += $answer->is_correct;
+            }
+            if($correct == 0){
+                return true;
+            }
+        }
+        return true;
     }
 }

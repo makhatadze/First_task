@@ -83,6 +83,19 @@ $this->title = $model->name;
                 }
             ],
             ['attribute' => 'Status',
+                'contentOptions' => function ($dataProvider) {
+
+                    if ($dataProvider->is_correct) {
+                        return ['style' => 'background-color:hover;
+                        color: green;
+                        '];
+                    }
+                    return ['style' => 'background-color:hover;
+                        color: red;                        
+                        text-style: bold;                            
+                        '];
+
+                },
                 'value' => function ($model) {
                     if ($model->is_correct) {
                         return 'Correct';

@@ -37,8 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 } else {
                     return ['style' => 'background-color:hover;
                         color: red;                        
-                        text-style: bold;
-                            
+                        text-style: bold;            
                         '];
                 }
             },

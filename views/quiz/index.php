@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -66,7 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'created_at',
                     'clientOptions' => [
                         'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
+                        'format' => 'yyyy-mm-dd',
+                        'style' => 'width: 20px;',
                     ]
                 ])
             ],
@@ -79,11 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'update_at',
                     'clientOptions' => [
                         'autoclose' => true,
+                        'format' => 'yyyy-mm-dd'
                     ]
                 ])
             ],
             [
-                'class' => 'app\widgets\GridAction',],
+                'class' => 'app\widgets\GridAction',
+                'contentOptions' => ['style' => 'width:200px; white-space: normal;'],
+            ],
+
         ],
     ]); ?>
 </div>

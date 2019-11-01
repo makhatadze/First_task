@@ -37,9 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'max_question',
             [
                 'label' => 'Created By',
-
                 'format' => 'raw',
-
                 'value' => function ($model) {
                     $user = $model->getCreatedBy();
                     if (!$user) {
@@ -48,13 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $user;
                     }
                 },
-
             ],
             [
                 'label' => 'Updated By',
-
                 'format' => 'raw',
-
                 'value' => function ($model) {
                     $user = $model->getUpdatedBy();
                     if (!$user) {
@@ -63,17 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $user;
                     }
                 },
-
             ],
             [
                 'label' => 'Certificate time',
-
                 'format' => 'raw',
-
                 'value' => function ($model) {
                     return "$model->certificate_valid_time Month";
                 },
-
             ],
         ],
     ]) ?>
@@ -84,12 +75,28 @@ $this->params['breadcrumbs'][] = $this->title;
     'dataProvider' => $dataProvider,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn',
-
         ],
         ['attribute' => 'Question',
             'value' => function ($model) {
                 return $model->name;
-
+            }
+        ],
+        ['attribute' => 'status',
+            'contentOptions' => function ($dataProvider) {
+                if ($dataProvider->questionStatus()) {
+                    return ['style' => 'background-color:hover;
+                        color: green;
+                        '];
+                }
+                    return ['style' => 'background-color:hover;
+                        color: red;                        
+                        text-style: bold;                          
+                        '];
+            },
+            'value' => function ($dataProvider) {
+                if($dataProvider->questionStatus()){
+                    return 'Valid';
+                } return 'Invalid';
             }
         ],
         ['class' => 'app\widgets\GridAction',

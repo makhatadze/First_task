@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\answer\Answer;
 use Faker\Calculator\TCNo;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -58,34 +59,28 @@ class QuizSearch extends Quiz
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            var_dump('vito');
-            exit();
             return $dataProvider;
         }
         if ($this->created_at) {
-            $createStart = strtotime($this->created_at);
-            $createEnd = $createStart + $dayInSeconds;
             $query->andFilterWhere([
-                'between', 'created_at', $createStart, $createEnd
+                'like',
+                'FROM_UNIXTIME(created_at, "%Y-%m-%d")',
+                $this->created_at
             ]);
-
         }
-
         if ($this->update_at) {
-            $updateStart = strtotime($this->update_at);
-            $updateEnd = $updateStart + $dayInSeconds;
             $query->andFilterWhere([
-                'between', 'update_at', $updateStart, $updateEnd
-            ]);
-
+                'like',
+                'FROM_UNIXTIME(update_at, "%Y-%m-%d")',
+                $this->update_at
+            ]);;
         }
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'min_corect_answer' => $this->min_corect_answer,
-        ]);
 
+        ]);
         $query->andFilterWhere(['like', 'subject', $this->subject]);
 
         return $dataProvider;

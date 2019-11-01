@@ -174,15 +174,15 @@ class QuizController extends Controller
     {
 
         $quiz = $this->findModel($id);
-
+        // Quiz validate
         if ($quiz->questionValidate() == false) {
             Yii::$app->session->setFlash('error', "Quiz have not question! ");
             return $this->redirect('index');
-        } else if ($quiz->answerValidate($id) == false) {
-            Yii::$app->session->setFlash('error', "Some question have not answer! ");
+        }
+        if ($quiz->quizPassedValidate($id) == false) {
+            Yii::$app->session->setFlash('error', "Some question answer is not complete! ");
             return $this->redirect('index');
         }
-
         $result = new Result();
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
         if (Yii::$app->request->post()) {

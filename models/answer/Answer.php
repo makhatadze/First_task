@@ -112,26 +112,6 @@ class Answer extends \yii\db\ActiveRecord
         return true;
     }
 
-    public function correctAnswerCount($id, $is_correct)
-    {
-        $count = 0;
-        $answers = Answer::find()
-            ->where(['question_id' => $id])
-            ->all();
-        if ($answers) {
-            foreach ($answers as $answer) {
-                $count += $answer->is_correct;
-            }
-        }
-        if ($count >= 1) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-
     /**
      * {@inheritdoc}
      */

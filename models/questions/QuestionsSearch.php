@@ -64,7 +64,6 @@ class QuestionsSearch extends Questions
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
-
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'hint', $this->hint]);
 

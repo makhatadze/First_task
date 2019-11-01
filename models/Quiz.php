@@ -66,7 +66,7 @@ class Quiz extends \yii\db\ActiveRecord
             [['subject'], 'unique'],
             ['max_question', 'compare', 'compareAttribute' => 'min_corect_answer', 'operator' => '>=', 'type' => 'number'],
             [['min_corect_answer', 'max_question'], 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
-            ['max_question', 'compare', 'compareValue' => $this->count(), 'operator' => '>=', 'type' => 'number'],
+            ['max_question', 'compare', 'compareValue' => $this->countQuestion(), 'operator' => '>=', 'type' => 'number'],
         ];
     }
 
@@ -88,15 +88,6 @@ class Quiz extends \yii\db\ActiveRecord
         ];
     }
 
-    public function count()
-    {
-        $count = Questions::find()
-            ->where(['quiz_id' => $this->id])
-            ->count();
-        return $count;
-    }
-
-
     public function deleteQuestion($param)
     {
 
@@ -113,6 +104,13 @@ class Quiz extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function countQuestion()
+    {
+        $count = Questions::find()
+            ->where(['quiz_id' => $this->id])
+            ->count();
+        return $count;
+    }
 
     public function getQuestions()
     {
@@ -148,18 +146,17 @@ class Quiz extends \yii\db\ActiveRecord
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
         $validate = true;
         foreach ($questions as $question) {
-            if (!$question->answers) {
+            if (!$question->questionStatus()) {
                 $validate = false;
-            } else {
-                $validate = true;
+                break;
             }
         }
         return $validate;
     }
 
-    function correctValidate()
+    function quizPassedValidate()
     {
-
+        $questionCount = $this->hasMany(Questions::className(), ['quiz_id' => 'id'])->count();
+        return ($this->min_corect_answer <= $questionCount);
     }
-
 }
