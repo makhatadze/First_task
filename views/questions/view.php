@@ -28,7 +28,6 @@ $this->title = $model->name;
         ]) ?>
 
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -81,9 +80,7 @@ $this->title = $model->name;
             ['attribute' => 'Answers',
                 'value' => function ($model) {
                     return $model->name;
-
                 }
-
             ],
             ['attribute' => 'Status',
                 'value' => function ($model) {
@@ -93,8 +90,6 @@ $this->title = $model->name;
                     return 'Incorrect';
                 }
             ],
-
-
             ['class' => 'app\widgets\GridAction',
                 'header' => 'Actions',
                 'headerOptions' => ['style' => 'color:#337ab7'],

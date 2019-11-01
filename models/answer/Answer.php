@@ -71,9 +71,31 @@ class Answer extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['name'], 'required'],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Questions::className(), 'targetAttribute' => ['question_id' => 'id']],
+            //['is_correct', 'compare', 'compareValue' => $this->countCorrect(), 'operator' => '>'],
+            ['is_correct', 'countCorrect', 'skipOnError' => false],
+
 
         ];
     }
+
+    function countCorrect($attribute, $params)
+    {
+        $answers = Answer::find()->where(['question_id' => $this->question_id])->all();
+        $countCorrect = 0;
+        if ($this->is_correct == 1) {
+            if ($answers) {
+                foreach ($answers as $answer) {
+                    $countCorrect += $answer->is_correct;
+                }
+                if ($countCorrect == 1) {
+                    $this->addError($attribute, "Question answer already exist correct..");
+                }
+            }
+        }
+
+
+    }
+
     public function maxAnswerCount($param)
     {
 
@@ -90,20 +112,20 @@ class Answer extends \yii\db\ActiveRecord
         return true;
     }
 
-    public function correctAnswerCount($id,$is_correct)
+    public function correctAnswerCount($id, $is_correct)
     {
-        $count =0;
+        $count = 0;
         $answers = Answer::find()
             ->where(['question_id' => $id])
             ->all();
-        if($answers){
-            foreach ($answers as $answer){
+        if ($answers) {
+            foreach ($answers as $answer) {
                 $count += $answer->is_correct;
             }
         }
-        if ($count >= 1){
-           return true;
-       }else {
+        if ($count >= 1) {
+            return true;
+        } else {
             return false;
         }
 

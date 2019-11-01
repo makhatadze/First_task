@@ -18,10 +18,9 @@ class QuizSearch extends Quiz
     public function rules()
     {
         return [
-            [['id', 'certificate_valid_time',
-                'min_corect_answer', 'created_at', 'update_at', 'max_question', 'created_by', 'updated_by',],
-                'integer'],
+            [['id', 'min_corect_answer',], 'integer'],
             [['subject'], 'safe'],
+            [['created_at', 'update_at'], 'string'],
         ];
     }
 
@@ -53,35 +52,32 @@ class QuizSearch extends Quiz
         ]);
 
         $this->load($params);
-            if($this->created_at){
-                $createStart = strtotime($this->created_at);
-                $createEnd = $createStart + 86400;
-                $query->andFilterWhere([
-                    'between', 'created_at', $createStart, $createEnd
-                ]);
-                $query->andFilterWhere([
-                    'id' => $this->id,
-                    'min_corect_answer' => $this->min_corect_answer,
-                ]);
-                $query->andFilterWhere(['like', 'subject', $this->subject]);
-            }
-            if($this->update_at){
-                $updateStart = strtotime($this->update_at);
-                $updateEnd = $updateStart + 86400;
-                $query->andFilterWhere([
-                    'between', 'update_at', $updateStart, $updateEnd
-                ]);
-                $query->andFilterWhere([
-                    'id' => $this->id,
-                    'min_corect_answer' => $this->min_corect_answer,
-                ]);
-                $query->andFilterWhere(['like', 'subject', $this->subject]);
-            }
+        $dayInSeconds = 86400;
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+            var_dump('vito');
+            exit();
             return $dataProvider;
+        }
+        if ($this->created_at) {
+            $createStart = strtotime($this->created_at);
+            $createEnd = $createStart + $dayInSeconds;
+            $query->andFilterWhere([
+                'between', 'created_at', $createStart, $createEnd
+            ]);
+
+        }
+
+        if ($this->update_at) {
+            $updateStart = strtotime($this->update_at);
+            $updateEnd = $updateStart + $dayInSeconds;
+            $query->andFilterWhere([
+                'between', 'update_at', $updateStart, $updateEnd
+            ]);
+
         }
 
         // grid filtering conditions

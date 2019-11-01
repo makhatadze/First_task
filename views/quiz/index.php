@@ -24,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ?>
     </p>
-
-
     <div id="message">
         <h1>
             <?= Yii::$app->session->getFlash('success'); ?>
@@ -47,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'visible' => !Yii::$app->user->isGuest,
                 'value' => function ($dataProvider) {
-
                     return Html::a('Start test', ['test', 'id' => $dataProvider->id], [
                         'class' => 'btn btn-info',
                         'data' => [
@@ -73,18 +70,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ])
             ],
-            [
-                'attribute' => 'Updated At',
+            ['attribute' => 'Updated At',
                 'value' => function ($dataProvider) {
                     return Yii::$app->formatter->asDate($dataProvider->update_at);
                 },
-
                 'filter' => DatePicker::widget([
                     'model' => $searchModel,
                     'attribute' => 'update_at',
                     'clientOptions' => [
                         'autoclose' => true,
-
                     ]
                 ])
             ],
@@ -93,3 +87,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+

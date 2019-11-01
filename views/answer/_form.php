@@ -13,12 +13,12 @@ use yii\widgets\ActiveForm;
 
 <div class="answer-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableAjaxValidation' => true]); ?>
 
 
-    <?= $form->field($model,'question_id')
+    <?= $form->field($model, 'question_id')
         ->dropDownList(
-            ArrayHelper::map(Questions::find()->all(),'id','name')
+            ArrayHelper::map(Questions::find()->all(), 'id', 'name')
         )
     ?>
 

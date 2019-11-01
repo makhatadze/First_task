@@ -68,24 +68,21 @@ class AnswerController extends Controller
      */
     public function actionCreate($id)
     {
-
         $model = new Answer();
         $model->question_id = $id;
-
+        if (Answer::maxAnswerCount($model->question_id) == 0) {
+            Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
+            return $this->redirect(['questions/view', 'id' => $id]);
+        }
+        if (Yii::$app->request->isAjax && $model->load($_POST)) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
         if ($model->load(Yii::$app->request->post())) {
-            if (Answer::maxAnswerCount($model->question_id) == 0) {
-                Yii::$app->session->setFlash('error', "You can't create much more answer! You can update or delete any answer");
-            }else if ($model->is_correct ==1 && Answer::correctAnswerCount($id,$model->is_correct) == true){
-                Yii::$app->session->setFlash('error', "You can't create one more correct answer! ");
-            }else{
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Successfully created answer");
-                    return $this->redirect(['questions/view', 'id' => $id]);
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', "Successfully created answer");
+                return $this->redirect(['questions/view', 'id' => $id]);
 
-                } else {
-                    echo($model->errors);
-                    exit();
-                }
             }
         }
         return $this->render('create', [
@@ -103,8 +100,12 @@ class AnswerController extends Controller
     public function actionUpdate($id)
     {
 
-        $model = $this->findModel($id);
 
+        $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax && $model->load($_POST)) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
         if ($model->load(Yii::$app->request->post())) {
             $model->updated_by = Yii::$app->user->getId();
             if ($model->save()) {
