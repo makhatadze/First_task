@@ -81,6 +81,9 @@ class Answer extends \yii\db\ActiveRecord
     function countCorrect($attribute, $params)
     {
         $answers = Answer::find()->where(['question_id' => $this->question_id])->all();
+        $answerCount = Answer::find()->where(['question_id' => $this->question_id])->count();
+        $questionMax = Questions::find()->where(['id' => $this->question_id])->select('max_answers')->scalar();
+
         $countCorrect = 0;
         if ($this->is_correct == 1) {
             if ($answers) {
@@ -91,14 +94,14 @@ class Answer extends \yii\db\ActiveRecord
                     $this->addError($attribute, "Question answer already exist correct..");
                 }
             }
+        } else if ($answerCount + 1 ==$questionMax && $this->is_correct ==0){
+            $this->addError($attribute, "You can't create incorrect answer! because this question don't have correct answer");
         }
-
 
     }
 
     public function maxAnswerCount($param)
     {
-
         $rows = Questions::find()
             ->where(['in', 'id', $param])
             ->select('max_answers')

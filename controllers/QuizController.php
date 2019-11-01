@@ -179,8 +179,12 @@ class QuizController extends Controller
             Yii::$app->session->setFlash('error', "Quiz have not question! ");
             return $this->redirect('index');
         }
-        if ($quiz->quizPassedValidate($id) == false) {
+        if ($quiz->answerValidate($id) == false) {
             Yii::$app->session->setFlash('error', "Some question answer is not complete! ");
+            return $this->redirect('index');
+        }
+        if ($quiz->quizPassedValidate($id) == false) {
+            Yii::$app->session->setFlash('error', "min correct answer more than questions! ");
             return $this->redirect('index');
         }
         $result = new Result();
@@ -202,9 +206,7 @@ class QuizController extends Controller
                 echo($result->errors);
                 exit();
             }
-
         }
-
         return $this->render('test', [
             'questions' => $questions,
         ]);
