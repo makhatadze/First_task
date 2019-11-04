@@ -136,27 +136,72 @@ class Quiz extends \yii\db\ActiveRecord
     {
         $questionCount = $this->hasMany(Questions::className(), ['quiz_id' => 'id'])->count();
         if ($questionCount == 0) {
-            return false;
+            return [
+                'success' => false,
+                'message' => "Quiz have not question! "
+            ];
         }
-        return true;
+        return [
+            'success' => true
+        ];
     }
 
     function answerValidate($id)
     {
         $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
-        $validate = true;
+
         foreach ($questions as $question) {
             if (!$question->questionStatus()) {
-                $validate = false;
-                break;
+                return [
+                    'success' => false,
+                    'message' => "Some question answer is not complete! "
+                ];
             }
         }
-        return $validate;
+
+        return [
+            'success' => true
+        ];
     }
 
     function quizPassedValidate()
     {
-        $questionCount = $this->hasMany(Questions::className(), ['quiz_id' => 'id'])->count();
-        return ($this->min_corect_answer <= $questionCount);
+        $questionCount = $this->hasMany(Questions::class, ['quiz_id' => 'id'])->count();
+
+        if ($this->min_corect_answer > $questionCount) {
+            return [
+                'success' => false,
+                'message' => "min correct answer more than questions! "
+            ];
+        }
+
+        return [
+            'success' => true
+        ];
+    }
+
+    function generalValidate($id)
+    {
+        $questionValidation = $this->questionValidate();
+        $answerValidation = $this->answerValidate($id);
+        $quizPassedValidation = $this->quizPassedValidate();
+
+        $returnData = [
+            'success' => false,
+        ];
+
+        if (!$questionValidation['success']) {
+            $returnData['message'] = $questionValidation['message'];
+        } else if (!$answerValidation['success']) {
+            $returnData['message'] = $answerValidation['message'];
+        } else if (!$quizPassedValidation['success']) {
+            $returnData['message'] = $quizPassedValidation['message'];
+        }
+
+        if (!isset($returnData['message'])) {
+            $returnData['success'] = true;
+        }
+
+        return $returnData;
     }
 }

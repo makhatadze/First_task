@@ -136,7 +136,7 @@ class Questions extends \yii\db\ActiveRecord
                 $correct += $answer->is_correct;
             }
             if($correct == 0){
-                return true;
+                return false;
             }
         }
         return true;

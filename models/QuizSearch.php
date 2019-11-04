@@ -53,7 +53,6 @@ class QuizSearch extends Quiz
         ]);
 
         $this->load($params);
-        $dayInSeconds = 86400;
 
 
         if (!$this->validate()) {
@@ -63,16 +62,12 @@ class QuizSearch extends Quiz
         }
         if ($this->created_at) {
             $query->andFilterWhere([
-                'like',
-                'FROM_UNIXTIME(created_at, "%Y-%m-%d")',
-                $this->created_at
+                'FROM_UNIXTIME(created_at, "%Y-%m-%d")' => $this->created_at
             ]);
         }
         if ($this->update_at) {
             $query->andFilterWhere([
-                'like',
-                'FROM_UNIXTIME(update_at, "%Y-%m-%d")',
-                $this->update_at
+                'FROM_UNIXTIME(update_at, "%Y-%m-%d")' => $this->update_at
             ]);;
         }
         // grid filtering conditions
