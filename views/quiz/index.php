@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'subject',
-            'min_corect_answer',
+            'min_correct_answer',
             [
                 'attribute' => 'Created At',
                 'value' => function ($dataProvider) {

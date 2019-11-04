@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject') ?>
 
-    <?= $form->field($model, 'min_corect_answer') ?>
+    <?= $form->field($model, 'min_correct_answer') ?>
 
     <?= $form->field($model, 'created_at') ?>
 

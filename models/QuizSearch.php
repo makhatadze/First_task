@@ -19,7 +19,7 @@ class QuizSearch extends Quiz
     public function rules()
     {
         return [
-            [['id', 'min_corect_answer',], 'integer'],
+            [['id', 'min_correct_answer',], 'integer'],
             [['subject'], 'safe'],
             [['created_at', 'update_at'], 'string'],
         ];
@@ -73,7 +73,7 @@ class QuizSearch extends Quiz
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'min_corect_answer' => $this->min_corect_answer,
+            'min_correct_answer' => $this->min_correct_answer,
 
         ]);
         $query->andFilterWhere(['like', 'subject', $this->subject]);

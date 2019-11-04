@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $subject
- * @property int $min_corect_answer
+ * @property int $min_correct_answer
  * @property int $created_at
  * @property int $update_at
  * @property int $max_question
@@ -60,12 +60,12 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['certificate_valid_time', 'min_corect_answer', 'max_question', 'created_by', 'updated_by'], 'integer'],
+            [['certificate_valid_time', 'min_correct_answer', 'max_question', 'created_by', 'updated_by'], 'integer'],
             [['subject'], 'string', 'max' => 127],
-            [['subject', 'min_corect_answer', 'max_question'], 'required'],
+            [['subject', 'min_correct_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
-            ['max_question', 'compare', 'compareAttribute' => 'min_corect_answer', 'operator' => '>=', 'type' => 'number'],
-            [['min_corect_answer', 'max_question'], 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
+            ['max_question', 'compare', 'compareAttribute' => 'min_correct_answer', 'operator' => '>=', 'type' => 'number'],
+            [['min_correct_answer', 'max_question'], 'compare', 'compareValue' => 0, 'operator' => '>=', 'type' => 'number'],
             ['max_question', 'compare', 'compareValue' => $this->countQuestion(), 'operator' => '>=', 'type' => 'number'],
         ];
     }
@@ -78,7 +78,7 @@ class Quiz extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'subject' => 'Subject',
-            'min_corect_answer' => 'Min Corect Answer',
+            'min_correct_answer' => 'Min Correct Answer',
             'created_at' => 'Created At',
             'update_at' => 'Update At',
             'max_question' => 'Max Question',
@@ -168,7 +168,7 @@ class Quiz extends \yii\db\ActiveRecord
     {
         $questionCount = $this->hasMany(Questions::class, ['quiz_id' => 'id'])->count();
 
-        if ($this->min_corect_answer > $questionCount) {
+        if ($this->min_correct_answer > $questionCount) {
             return [
                 'success' => false,
                 'message' => "min correct answer more than questions! "

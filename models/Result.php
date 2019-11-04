@@ -80,7 +80,7 @@ class Result extends \yii\db\ActiveRecord
             ->scalar();
         $minCorrect = Quiz::find()
             ->where(['id' => $id])
-            ->select('min_corect_answer')
+            ->select('min_correct_answer')
             ->scalar();
         $questionCount= Questions::find()
             ->where(['in', 'quiz_id', $id])

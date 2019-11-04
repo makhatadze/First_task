@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'subject',
-            'min_corect_answer',
+            'min_correct_answer',
             'created_at:datetime',
             'update_at:datetime',
             'max_question',
