@@ -174,7 +174,6 @@ class Quiz extends \yii\db\ActiveRecord
                 'message' => "min correct answer more than questions! "
             ];
         }
-
         return [
             'success' => true
         ];

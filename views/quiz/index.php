@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         if (!Yii::$app->user->isGuest) {
             echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']);
         }
-
         ?>
     </p>
     <div id="message">

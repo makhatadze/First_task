@@ -72,7 +72,6 @@ class QuizSearch extends Quiz
         }
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'min_correct_answer' => $this->min_correct_answer,
 
         ]);

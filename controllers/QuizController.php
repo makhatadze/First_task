@@ -189,8 +189,6 @@ class QuizController extends Controller
             $result->createResult(Yii::$app->request->post(), $id, $result);
 
             if ($result->save()) {
-
-
                 if ($result->certificate_valid_time) {
                     Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $result->correct_answer);
                 } else {

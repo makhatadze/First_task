@@ -4,9 +4,12 @@
  * Date: 8/11/2019
  * Time: 12:52 PM
  */
+
 namespace app\models;
+
 use yii\base\Model;
 use yii\helpers\VarDumper;
+
 /**
  * Class SignupForm
  *
@@ -18,6 +21,7 @@ class SignupForm extends Model
     public $username;
     public $password;
     public $password_repeat;
+
     public function rules()
     {
         return [
@@ -27,6 +31,7 @@ class SignupForm extends Model
             [['password_repeat'], 'compare', 'compareAttribute' => 'password']
         ];
     }
+
     public function signup()
     {
         $user = new User();
@@ -34,10 +39,10 @@ class SignupForm extends Model
         $user->auth_key = \Yii::$app->security->generateRandomString();
         $user->access_token = \Yii::$app->security->generateRandomString();
         $user->password = \Yii::$app->security->generatePasswordHash($this->password);
-        if ($user->save()){
+        if ($user->save()) {
             return true;
         }
-        \Yii::error("User was not saved: ".VarDumper::dumpAsString($user->errors));
+        \Yii::error("User was not saved: " . VarDumper::dumpAsString($user->errors));
         return false;
     }
 }
