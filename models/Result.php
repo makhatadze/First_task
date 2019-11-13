@@ -3,7 +3,10 @@
 namespace app\models;
 
 use app\models\questions\Questions;
+use http\Url;
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -34,7 +37,6 @@ class Result extends \yii\db\ActiveRecord
     {
         return 'result';
     }
-
 
     /**
      * {@inheritdoc}
@@ -69,44 +71,47 @@ class Result extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by'])->select('username')->scalar();
     }
-    function createResult($dataResult,$id,$result){
-        $quizName = Quiz::find()
-            ->where(['id' => $id])
-            ->select('subject')
-            ->scalar();
-        $validTime = Quiz::find()
-            ->where(['id' => $id])
-            ->select('certificate_valid_time')
-            ->scalar();
-        $minCorrect = Quiz::find()
-            ->where(['id' => $id])
-            ->select('min_correct_answer')
-            ->scalar();
-        $questionCount= Questions::find()
-            ->where(['in', 'quiz_id', $id])
-            ->count();
 
-        $data =$dataResult;
-        $correctAnswer = 0;
-        foreach ($data as $key => $item) {
-            if ($data[$key] == 1) {
-                $correctAnswer += 1;
-            }
-        }
-        $month = "+" . $validTime . " month";
-        $result->created_at = time();
-        $result->correct_answer = $correctAnswer;
-        $result->min_correct_answer = $minCorrect;
-        $result->question_count = $questionCount;
-        $result->created_by = Yii::$app->user->getId();
-        $result->quiz_name = $quizName;
-        if ($minCorrect <= $correctAnswer) {
-            $result->certificate_valid_time = strtotime($month, $result->created_at);
-        }
-
-        return $result;
+    public function dataJsonEncode($id)
+    {
+        $user = User::find()->all();
+        $questions = Questions::find()
+            ->asArray()
+            ->where(['quiz_id' => $id])
+            ->with(['answers', 'logAnswers'])
+            ->select(['id', 'name', 'quiz_id'])
+            ->all();
+        return $questions;
     }
 
+    public function createResult($data)
+    {
+        $quizId = (int)$data['quizID'];
+        $quizName = Quiz::find()->where(['id' => $quizId])->select('subject')->scalar();
+        $certificateTime = Quiz::find()->where(['id' => $quizId])->select('certificate_valid_time')->scalar();
+        $minCorrect = Quiz::find()->where(['id' => $quizId])->select('min_correct_answer')->scalar();
+        $userId = Yii::$app->user->id;
+
+        $month = "+" . $certificateTime . " month";
+
+        $this->created_at = time();
+        $this->correct_answer = (int)$data['correctAnswer'];
+        $this->question_count = (int)$data['questionCount'];
+        $this->min_correct_answer = $minCorrect;
+        $this->certificate_valid_time = $certificateTime;
+        $this->quiz_name = $quizName;
+        $this->created_by = $userId;
+        if ($minCorrect <= (int)$data['correctAnswer']) {
+            $this->certificate_valid_time = strtotime($month, $this->created_at);
+        }
+        if($this->save()){
+            if(LogAnswer::deleteAll(['user_id' =>$userId]))
+            return true;
+        }
+        return false;
+
+
+    }
 
 
 }

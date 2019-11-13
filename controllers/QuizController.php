@@ -2,12 +2,17 @@
 
 namespace app\controllers;
 
+use app\models\answer\Answer;
+use app\models\LogAnswer;
 use app\models\questions\Questions;
 use app\models\questions\QuestionsSearch;
 use app\models\Quiz;
 use app\models\QuizSearch;
 use app\models\Result;
+use pollext\poll\Poll;
 use Yii;
+use yii\base\Action;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -172,38 +177,54 @@ class QuizController extends Controller
 
     public function actionTest($id)
     {
-
-        $quiz = $this->findModel($id);
-        // Quiz validate
-        $validationResult = $quiz->generalValidate($id);
-
-        if (!$validationResult['success']) {
-            Yii::$app->session->setFlash('error', $validationResult['message']);
-            return $this->redirect('index');
-        }
-
         $result = new Result();
-        $questions = Questions::find()->where(['in', 'quiz_id', $id])->all();
-        if (Yii::$app->request->post()) {
 
-            $result->createResult(Yii::$app->request->post(), $id, $result);
+        $data = $result->dataJsonEncode($id);
 
-            if ($result->save()) {
-                if ($result->certificate_valid_time) {
-                    Yii::$app->session->setFlash('success', "You successfully passed exam! Your correct answer is " . $result->correct_answer);
-                } else {
-                    Yii::$app->session->setFlash('error', "You failed! your correct answer is " . $result->correct_answer . "! Min correct answer is  " . $result->min_correct_answer);
-                }
-                return $this->redirect(['result/index']);
+        return $this->render('try1', [
+            'data' => $data
+
+        ]);
+    }
+    public function actionSave(){
+
+        if (Yii::$app->request->isAjax) {
+            $user_id = Yii::$app->user->id;
+            $data = Yii::$app->request->post();
+            $id = LogAnswer::find()->where(['question_id' =>$data['questionId']])->select('question_id')->scalar();
+            $int = (int)$id;
+            $model = LogAnswer::find()->where(['question_id' => $int])->andWhere(['user_id' => $user_id])->one();
+            if ($model) {
+                $model->answer_id = $data['selected'];
+                $model->save();
+
             } else {
-                echo($result->errors);
-                exit();
+                $model = new LogAnswer();
+                $data = Yii::$app->request->post();
+                $model->user_id = $user_id;
+                $model->quiz_id = (int)$data['quizId'];
+                $model->question_id = (int)$data['questionId'];
+                $model->answer_id = (int)$data['selected'];
+                if ($model->save()) {
+
+                } else {
+                    var_dump($model->errors);
+                    exit();
+                }
             }
         }
-        return $this->render('test', [
-            'questions' => $questions,
-        ]);
+    }
+    public function actionResult(){
+        if(Yii::$app->request->isAjax){
+            $model = new Result();
+            $data = Yii::$app->request->post();
 
+            var_dump($model->createResult($data));
+            exit();
+//            correctAnswer: scoreResult(),
+//                        questionCount: data.length,
+//                        quizID: data[0].quiz_id
+        }
     }
 
 

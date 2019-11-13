@@ -178,6 +178,10 @@ class Quiz extends \yii\db\ActiveRecord
             'success' => true
         ];
     }
+    function logAnswer(){
+        $userId = Yii::$app->user->id;
+        return $this->hasMany(LogAnswer::className(), ['quiz_id' => 'id'])->andWhere(['user_id' => $userId]);
+    }
 
     function generalValidate($id)
     {

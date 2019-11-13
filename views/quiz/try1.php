@@ -19,5 +19,5 @@
     var data =<?php echo json_encode($data);?>;
 
 </script>
-<?php $this->registerCssFile('@web/css/test.css', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
+<?php //$this->registerCssFile('@web/css/try1.css', ['depends' => [yii\web\JqueryAsset::className()]]); ?>
 <?php $this->registerJsFile('@web/js/try1.js', ['depends' => 'yii\web\JqueryAsset']) ?>

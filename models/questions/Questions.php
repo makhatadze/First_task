@@ -3,6 +3,7 @@
 namespace app\models\questions;
 
 use app\models\answer\Answer;
+use app\models\LogAnswer;
 use app\models\Quiz;
 use app\models\User;
 use yii\behaviors\BlameableBehavior;
@@ -112,6 +113,12 @@ class Questions extends \yii\db\ActiveRecord
         return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
 
+    public function getLogAnswers()
+    {
+        $user_id = \Yii::$app->user->id;
+        return $this->hasMany(LogAnswer::className(), ['question_id' => 'id'])->andWhere(['user_id' => $user_id]);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -125,17 +132,19 @@ class Questions extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by'])->select('username')->scalar();
     }
-    public function questionStatus(){
-        $answers = $this->hasMany(Answer::className(),['question_id' => 'id'])->all();
-        $countAnswer = $this->hasMany(Answer::className(),['question_id' => 'id'])->count();
+
+    public function questionStatus()
+    {
+        $answers = $this->hasMany(Answer::className(), ['question_id' => 'id'])->all();
+        $countAnswer = $this->hasMany(Answer::className(), ['question_id' => 'id'])->count();
         $correct = 0;
-        if($countAnswer <= 1){
+        if ($countAnswer <= 1) {
             return false;
-        }   else {
-            foreach ($answers as $answer){
+        } else {
+            foreach ($answers as $answer) {
                 $correct += $answer->is_correct;
             }
-            if($correct == 0){
+            if ($correct == 0) {
                 return false;
             }
         }

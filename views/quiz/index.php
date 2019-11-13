@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         if (!Yii::$app->user->isGuest) {
             echo Html::a('Create Quiz', ['create'], ['class' => 'btn btn-success']);
         }
+
         ?>
     </p>
     <div id="message">
@@ -43,6 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'visible' => !Yii::$app->user->isGuest,
                 'value' => function ($dataProvider) {
+                    if(\app\models\LogAnswer::find()->where(['quiz_id' => $dataProvider->id, 'user_id' =>Yii::$app->user->id])->count() > 0){
+                        return Html::a('Resume test', ['test', 'id' => $dataProvider->id], [
+                            'class' => 'btn btn-warning',
+                            'data' => [
+                                'confirm' => 'Are you sure that you want to start test?',
+                            ],
+                        ]);
+                    }
                     return Html::a('Start test', ['test', 'id' => $dataProvider->id], [
                         'class' => 'btn btn-info',
                         'data' => [
