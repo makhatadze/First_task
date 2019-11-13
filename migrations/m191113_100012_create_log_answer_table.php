@@ -6,7 +6,7 @@ use yii\db\Migration;
 /**
  * Class m191108_102825_log_answer_table
  */
-class m191108_104457_log_answer_table extends Migration
+class m191113_100012_create_log_answer_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class m191108_104457_log_answer_table extends Migration
             'user_id' => $this->integer(),
             'quiz_id' => $this->integer(),
             'question_id' => $this->integer(),
-            'answer' => $this->String(),
+            'answer_id' => $this->String(),
         ]);
 
 
