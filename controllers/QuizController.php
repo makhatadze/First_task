@@ -177,21 +177,30 @@ class QuizController extends Controller
 
     public function actionTest($id)
     {
+        $quiz = $this->findModel($id);
+        // Quiz validate
+        $validationResult = $quiz->generalValidate($id);
+        if (!$validationResult['success']) {
+            Yii::$app->session->setFlash('error', $validationResult['message']);
+            return $this->redirect('index');
+        }
         $result = new Result();
 
         $data = $result->dataJsonEncode($id);
 
-        return $this->render('try1', [
+        return $this->render('test', [
             'data' => $data
 
         ]);
     }
-    public function actionSave(){
+
+    public function actionSave()
+    {
 
         if (Yii::$app->request->isAjax) {
             $user_id = Yii::$app->user->id;
             $data = Yii::$app->request->post();
-            $id = LogAnswer::find()->where(['question_id' =>$data['questionId']])->select('question_id')->scalar();
+            $id = LogAnswer::find()->where(['question_id' => $data['questionId']])->select('question_id')->scalar();
             $int = (int)$id;
             $model = LogAnswer::find()->where(['question_id' => $int])->andWhere(['user_id' => $user_id])->one();
             if ($model) {
@@ -214,16 +223,16 @@ class QuizController extends Controller
             }
         }
     }
-    public function actionResult(){
-        if(Yii::$app->request->isAjax){
+
+    public function actionResult()
+    {
+        if (Yii::$app->request->isAjax) {
             $model = new Result();
             $data = Yii::$app->request->post();
 
             var_dump($model->createResult($data));
             exit();
-//            correctAnswer: scoreResult(),
-//                        questionCount: data.length,
-//                        quizID: data[0].quiz_id
+
         }
     }
 
