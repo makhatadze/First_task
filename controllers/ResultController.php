@@ -39,7 +39,6 @@ class ResultController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $count = Result::find()->count();
 
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

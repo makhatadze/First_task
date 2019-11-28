@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\answer\Answer;
 use app\models\questions\Questions;
 use http\Url;
 use Yii;
@@ -109,6 +110,42 @@ class Result extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+
+
+    }
+    public function finishTime($quizID){
+        $logAnwers = LogAnswer::find()->asArray()->where(['quiz_id' => $quizID, 'user_id' => Yii::$app->user->id])->all();
+        $correctAnswer = 0;
+        $userId = Yii::$app->user->id;
+        $minCorrect = Quiz::find()->where(['id' => $quizID])->select('min_correct_answer')->scalar();
+        $quizName = Quiz::find()->where(['id' => $quizID])->select('subject')->scalar();
+        $certificateTime = Quiz::find()->where(['id' => $quizID])->select('certificate_valid_time')->scalar();
+        $month = "+" . $certificateTime . " month";
+        $questionCount = Questions::find()->where(['quiz_id' => $quizID])->count();
+
+        foreach ($logAnwers as $logAnwer) {
+            if ($logAnwer["answer_id"]) {
+                $correctAnswer += Answer::find()->where(['id' => $logAnwer["answer_id"]])->select('is_correct')->scalar();
+
+            }
+        }
+        $this->created_by = $userId;
+        $this->created_at = time();
+        $this->correct_answer = $correctAnswer;
+        $this->min_correct_answer = $minCorrect;
+        $this->quiz_name = $quizName;
+        $this->question_count = $questionCount;
+
+        if ($minCorrect <= $correctAnswer) {
+            $this->certificate_valid_time = strtotime($month, $this->created_at);
+        }
+        if ($this->save()) {
+            if(LogAnswer::deleteAll(['user_id' => $userId]))
+                return true;
+
+        }
+        return false;
+
 
 
     }

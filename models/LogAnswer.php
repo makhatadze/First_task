@@ -15,6 +15,7 @@ use Yii;
  * @property int $question_id
  * @property int $answer_id
  * @property int $answer_name
+ * @property int $created_at
  *
  * @property Questions $question
  * @property Quiz $quiz
@@ -36,7 +37,7 @@ class LogAnswer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'quiz_id', 'question_id', 'answer_id',], 'required'],
+            [['user_id', 'quiz_id',], 'required'],
 
         ];
     }
@@ -78,5 +79,20 @@ class LogAnswer extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function createLog($id) {
+        $model = new LogAnswer();
+        $model->user_id = Yii::$app->user->id;
+        $model->quiz_id = $id;
+        $month = "+2 hour";
+        $model->created_at = strtotime($month, time());
+
+
+        $data = LogAnswer::find()->where(['user_id' => Yii::$app->user->id])->count();
+        if ($data == 0) {
+           $model->save();
+        }
+
     }
 }

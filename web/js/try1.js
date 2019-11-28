@@ -1,13 +1,9 @@
 (function () {
-
-
     var quesCounter = 0;
     var selectOptions = [];
     var quizSpace = $('#quiz');
 
     nextQuestion();
-    console.log(data);
-
     $('#next').click(function () {
         console.log(quesCounter);
 

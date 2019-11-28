@@ -177,7 +177,15 @@ class QuizController extends Controller
 
     public function actionTest($id)
     {
+        $model = new LogAnswer();
+
+        $model = $model->createLog($id);
         $quiz = $this->findModel($id);
+
+        $time = LogAnswer::find()->where(['quiz_id' => $id, 'user_id' => Yii::$app->user->id])->sum('created_at');
+        $time;
+        $time -= 3600;
+
         // Quiz validate
         $validationResult = $quiz->generalValidate($id);
         if (!$validationResult['success']) {
@@ -189,8 +197,8 @@ class QuizController extends Controller
         $data = $result->dataJsonEncode($id);
 
         return $this->render('test', [
-            'data' => $data
-
+            'data' => $data,
+            'time' => $time,
         ]);
     }
 
@@ -234,6 +242,23 @@ class QuizController extends Controller
             exit();
 
         }
+    }
+    public function actionFinish()
+    {
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $quizID = $data['quizID'];
+            $model = new Result();
+
+            if ($model->finishTime($quizID)) {
+
+            }
+            return $this->redirect('finish');
+        }
+
+        return $this->render('finish');
+
     }
 
 
