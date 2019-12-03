@@ -7,6 +7,8 @@
 
 namespace app\commands;
 
+use app\models\LogAnswer;
+use app\models\Result;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -30,5 +32,21 @@ class HelloController extends Controller
         echo $message . "\n";
 
         return ExitCode::OK;
+    }
+    public function actionLog() {
+        $logs = LogAnswer::find()->asArray()->with(['quiz'])->all();
+        foreach ($logs as $log) {
+
+            if ($log['created_at']) {
+                // now
+                $time = time () + (4 * 60 * 60);
+                $created_at = $log['created_at'] + 2 * 60 * 60;
+                $quiz_time = $log['quiz']['quiz_time'] * 60;
+                if ($time - ($created_at + $quiz_time) > 0 ) {
+                    $model = new Result();
+                    $model->finishTime($log['quiz']['id']);
+                }
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property int $max_question
  * @property int $updated_by
  * @property int $created_by
+ * @property int $quiz_time
  * @property int $certificate_valid_time
  *
  * @property Questions[] $questions
@@ -60,7 +61,7 @@ class Quiz extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['certificate_valid_time', 'min_correct_answer', 'max_question', 'created_by', 'updated_by'], 'integer'],
+            [['certificate_valid_time', 'min_correct_answer', 'max_question', 'created_by', 'updated_by','quiz_time'], 'integer'],
             [['subject'], 'string', 'max' => 127],
             [['subject', 'min_correct_answer', 'max_question'], 'required'],
             [['subject'], 'unique'],
@@ -85,6 +86,7 @@ class Quiz extends \yii\db\ActiveRecord
             'created_by' => 'Created by',
             'updated_by' => 'Updated by',
             'certificate_valid_time' => 'Certificate Time',
+            'quiz_time' => 'Quiz time'
         ];
     }
 

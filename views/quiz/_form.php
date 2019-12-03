@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'max_question')->textInput()->label('Maximum Question') ?>
 
+    <?= $form->field($model, 'quiz_time')->textInput()->label('Quiz Time in minutes') ?>
+
     <?= $form->field($model, 'certificate_valid_time')->dropDownList(
         ['24' => '2 Year',
             '12' => '12 month',

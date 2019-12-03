@@ -181,10 +181,12 @@ class QuizController extends Controller
 
         $model = $model->createLog($id);
         $quiz = $this->findModel($id);
+        $quiz_time = $quiz->quiz_time;
+
 
         $time = LogAnswer::find()->where(['quiz_id' => $id, 'user_id' => Yii::$app->user->id])->sum('created_at');
         $time;
-        $time -= 3600;
+        $time -= 7200 - $quiz_time * 60;
 
         // Quiz validate
         $validationResult = $quiz->generalValidate($id);
@@ -243,6 +245,7 @@ class QuizController extends Controller
 
         }
     }
+
     public function actionFinish()
     {
 
@@ -260,6 +263,5 @@ class QuizController extends Controller
         return $this->render('finish');
 
     }
-
 
 }
